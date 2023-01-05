@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+
+
+{% block content %}
+    <head>
+    <style>
+    body{margin: 10px;
+        }
+    p{padding: 10px
+        }
+    
+    </style>
+    </head>
+
+    <h2>My Favorite Drinks</h2>
+    
+    <div class="row">
+
+        {% for f in favoriteDrinksForm.favList %}
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100">
+              <div class="card-body">
+                <h4 class="card-title", style="color:orange">
+                  {{ f[1].name }} 
+                </h4>
+                <h5>Flavor: {{ f[2] }} 
+                </h5>
+                <p class="card-text"> {{ f[1].description }} <br>
+                  Temp: {{ f[3] }}<br>
+                  Decaf: {{ f[0].decaf }}
+                </p>
+              </div>
+            </div>
+        </div>
+        {% endfor %}
+
+
+    </div>
+    
+    {%if favoriteDrinksForm.favList|length > 0 %}
+    <p>
+      <form action="" method="post">
+      {{favoriteDrinksForm.favs}}<br>
+      {{favoriteDrinksForm.order}} {{favoriteDrinksForm.delete}}
+     </form>
+    </p>
+    {%else%}
+    <p> No favorite drinks yet...</p>
+    {%endif%}
+   
+    
+{% endblock %}

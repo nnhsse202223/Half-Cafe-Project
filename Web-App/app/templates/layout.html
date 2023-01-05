@@ -1,0 +1,120 @@
+
+<!doctype html>
+<html lang="en">
+{% block html %}
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta charset="utf-8">
+        <title> {{ title }} </title>
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+        <style>
+        body{margin: 10px;
+             color: #104fb5;
+            }
+
+        a{color: #ff9138;
+            }
+        
+        #newItem{
+          color: #104fb5;
+          padding-left: 125vh;
+          align-items: right;
+          text-align: right;
+      
+        }
+        </style>
+
+    </head>
+    <body>
+        <div>
+        <h1> NNHS Half Caf</h1>
+        
+        {% block navbar %}
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                <a class="nav-link" href="{{ url_for('main.home') }}">Home <span class="sr-only">(current)</span></a>
+
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('main.menu') }}">Menu</a>
+                  </li>
+
+                {% if current_user.is_authenticated %}
+                  <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('main.myOrder', orderId=current_user.current_order_id) }}">My Order</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="{{url_for('main.favoriteDrinks')}}">My Favorites</a>
+                  </li>
+                {% endif %}
+                  
+                {% if current_user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('main.logout') }}">Logout</a>
+                  </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('main.login') }}">Login</a>
+                  </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('main.teacherRegister') }}">Register</a>
+                  </li>
+                {% endif %}
+
+                
+
+
+                {% if current_user.is_authenticated %}
+                <li class = "nav-link" id = "newItem"> {{current_user.username}} </li>
+                   
+                {% else %}
+                <div class = "nav-link" id="newItem"> Not Logged In </div>
+                {%endif%}
+
+                <!-- {% if current_user.is_authenticated %}
+                <li class = "nav-item"> {{current_user.username}} </li>
+                   
+                {% else %}
+                <li class = "nav-item"> Not Logged In </li>
+                {%endif%} -->
+
+
+                <!-- {% if current_user.username != None%}
+                <li class = "nav-item"> {{current_user.username}} </li>
+                {% else %}
+                <li class = "nav-item"> Not Logged In </li>
+                {%endif%} -->
+
+            </ul>
+          </div>
+        </nav>
+
+        {%with messages = get_flashed_messages()%}
+        {%if messages%}
+        <u1>
+          {%for message in messages%}
+          <li>{{message}}</li>
+          {%endfor%}
+        </u1>
+        {%endif%}
+        {%endwith%}
+        {% endblock %}
+
+        {% block content %}
+        
+        {% endblock %}
+        
+
+        
+        
+        </div>
+    </body>
+{% endblock %}
+</html>

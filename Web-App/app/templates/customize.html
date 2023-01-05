@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+
+
+{% block content %}
+    <head>
+    <style>
+    body{margin: 10px;
+        }
+    p{padding: 10px
+        }
+    
+    </style>
+    </head>
+
+    <form action="" method="post">
+    <div class="container">
+
+        <div class="row">
+
+          <div class="col-lg-12">
+
+            <div>
+            <h2>Customize Drink</h2>
+            </div>
+
+                <h5>{{ m.name }}</h5>
+                
+                <p>{{ form.temp.label }}  {{ form.temp }}</p>
+                
+                <p>{{ form.decaf }} {{ form.decaf.label }}</p>
+                
+                <p>{{ form.flavors.label }}  {{ form.flavors }}</p>
+
+                <p>{{ form.fav }} {{ form.fav.label }}</p>
+                
+                <p>{{ form.inst.label }}  {{ form.inst }}</p>
+
+                <p>{{ form.submit }}</p>
+
+          </div>
+          <!-- /.col-lg-12 -->
+
+        </div>
+        <!-- /.row -->
+
+      </div>
+        </form>
+
+    
+{% endblock %}

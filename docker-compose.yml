@@ -1,0 +1,27 @@
+version: "3.7"
+services:
+  webapp:
+    build: ./Web-App
+    depends_on:
+      - db
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./Web-App/app:/home/half-caf-web-app/app:rw
+      - ./Web-App/migrations:/home/half-caf-web-app/migrations:rw
+  db:
+    image: mariadb
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: halfcafwebappadmins123
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d/:ro
+  phpmyadmin:
+    image: phpmyadmin:latest
+    ports:
+      - 8080:80
+    environment:
+      PMA_HOST: db
+      PMA_PASSWORD: halfcafwebappadmins123
+    restart: unless-stopped

@@ -1,0 +1,6 @@
+A new user {{username}} has created an account. You can choose to activate them or delete them. 
+Their email address is {{email_address}}  
+# make email interactive with a link to activate or deacctivate
+
+
+

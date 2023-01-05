@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <head>
+    <style>
+        #mainStuff{
+            background-color: #C5C9B8;
+            width: 45%;
+            height: auto;
+            color: #333333;
+            margin: auto;
+            overflow: hidden;
+            padding: 50px 0;
+            align-items: center;
+            justify-content: space-around;
+            display: flex;
+            float: none;
+        }
+
+        #center{
+            color: #333333;
+            margin: auto;
+            overflow: hidden;
+            padding: 100px 0;
+            align-items: center;
+            justify-content: space-around;
+            display: flex;
+            float: none;
+        }
+        </style>
+        </head>
+
+    <h1 id="center">Register</h1>
+
+    <div id="mainStuff">
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.username.label }}<br>
+            {{ form.username(size=32) }}<br>
+            {% for error in form.username.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.email.label }}<br>
+            {{ form.email(size=32) }}<br>
+            {% for error in form.email.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.password.label }}<br>
+            {{ form.password(size=32) }}<br>
+            {% for error in form.password.errors %}
+            <span style="color: red;"[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.password2.label }}<br>
+            {{ form.password2(size=32) }}<br>
+            {% for error in form.password.errors %}
+            <span style="color: red;"[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.user_type }}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+    </div>
+    {% endblock %}

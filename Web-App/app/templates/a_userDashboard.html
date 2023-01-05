@@ -1,0 +1,25 @@
+{% extends "admin.html" %}
+
+{% block content %}
+
+<form action="" method="post" novalidate>
+<div>
+    <h1>User Dashboard</h1>
+    <hr>
+    <br>
+    <h3>Users</h3>
+    {%for subfield in userDashboardForm.views%}
+        <tr>
+            <td> {{subfield}} </td>
+            <td> {{subfield.label}} </td>
+        </tr>
+    {%endfor%}
+            <td>{{userDashboardForm.submitView}}</td>
+    <p style="color:black">Press and hold CTRL while clicking to select multiple users.</p>
+    <div align="center">{{userDashboardForm.users(size=15)}}</div>
+</div>
+<div>
+    <br><p>{{userDashboardForm.submitActivate}}  {{userDashboardForm.submitDeactivate}}</p>
+</div>
+</form>
+{% endblock %}

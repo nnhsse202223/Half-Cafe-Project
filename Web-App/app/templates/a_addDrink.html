@@ -1,0 +1,14 @@
+{% extends "admin.html" %}
+
+{% block content %}
+<form action="" method="post" novalidate>
+<div>
+    <p>Add Drink</p>
+    <p>{{ addDrinkForm.name.label }} {{ addDrinkForm.name }}</p>
+    <p>{{ addDrinkForm.desc.label }} {{ addDrinkForm.desc }}</p>
+    <p>{{ addDrinkForm.price.label }} {{ addDrinkForm.price }}</p>
+    <p>{{ addDrinkForm.popular.label }} {{ addDrinkForm.popular }}</p>
+    <p>{{ addDrinkForm.submit }}</p><br>
+    </div>
+</form>
+{% endblock %}

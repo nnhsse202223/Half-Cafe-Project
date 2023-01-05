@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+{% block html %}
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta charset="utf-8">
+        <meta http-equiv='refresh' content='30';url=url_for('barista') />
+        <title> {{ title }} </title>
+        
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script>
+          $(document).ready(function(){
+            $(".notification_icon").click(function(){
+              $(".dropdown").toggleClass("active");
+              $(".icon-button__badge").addClass("inactive");
+              console.log("test text");
+            });
+          });
+          // let c = document.getElementById("clicks")
+          // c.addEventListener("click", e => {console.log(e)})
+
+        </script>
+        <style>
+
+            body {
+              margin: 25px;
+            }
+
+            .notification_wrap{
+              width: 500px;
+              margin: 120px auto 0;
+            }
+
+            .notification_wrap .notification_icon .icon-button {
+              position: absolute;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              width: 50px;
+              height: 50px;
+              color: #333333;
+              background: #dddddd;
+              border: none;
+              outline: none;
+              border-radius: 50%;
+              right: 20px;
+              top: 70px; 
+            }
+
+            .notification_wrap .notification_icon .icon-button:hover {
+              cursor: pointer;
+            }
+
+            .notification_wrap .notification_icon .icon-button:active {
+              background: #cccccc;
+            }
+
+            .notification_wrap .notification_icon .icon-button__badge {
+              position: absolute;
+              top: -5px;
+              right: -5px;
+              width: 20px;
+              height: 20px;
+              background: red;
+              color: #ffffff;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              border-radius: 50%;
+            } 
+
+            .notification_wrap .notification_icon .icon-button__badge.inactive {
+              display: none;
+            }
+
+            .notification_wrap .dropdown{
+              width: 300px;
+              height: auto;
+              right: 5px;
+              top: 135px;
+              background: #e4e4e4;
+              border-radius: 5px;
+              position: relative;
+              padding: 13px;
+              display: none;
+            }
+
+            .notification_wrap .dropdown .notify_item{
+              display: flex;
+              align-items: center;
+              padding: 10px 0;
+              border-bottom: 1px solid #dbdaff;
+            }
+
+            .notification_wrap .dropdown .notify_item .notify_info p span{
+              color: #605dff;
+              margin-left: 5px;
+            }
+
+            .notification_wrap .dropdown:before{
+              content: "";
+              position: absolute;
+              top: -30px;
+	            left: 87%;
+	            transform: translateX(-50%);
+            	border: 15px solid;
+            	border-color: transparent transparent #e4e4e4 transparent;
+            }
+
+            .notification_wrap .dropdown.active{
+            	display: block;
+              position: absolute;
+            }
+
+            body{margin: 10px;
+              color: #104fb5;
+            }
+        </style>
+    </head>
+    <body>
+        
+        <h1> NNHS Half Caf Barista</h1>
+        {% block navbar %}
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('main.barista') }}">Orders</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('main.baristaCompleted') }}">Completed Orders</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('main.logout') }}">Logout</a>
+                  </li>
+                  {% if order_time %}
+                  <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('main.disable') }}">Disable</a>
+                  </li>
+                  {% else %}
+                  <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('main.enable') }}">Enable</a>
+                  </li>           
+                  {% endif %}       
+            </ul>
+            
+          </div>
+        </nav>
+        {% endblock %}
+        <div>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">Room Number</th>
+              <th scope="col">Teacher</th>
+              <th scope="col">Drinks</th>
+              <th scope="col">Temp</th>
+              <th scope="col">Decaf</th>
+              <th scope="col">Flavors</th>
+              <th scope="col">Special Instructions</th>
+              <th scope="col">Timestamp</th>
+              <th scope="col">Finished</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for o in order_list %}
+          <!--Order list 
+            o[0] - Username (ex. teacher)
+            o[1] - order info 
+              d - drink info
+            o[2] - Room number
+            o[3] - Timestamp
+            o[4] - Order number (?)
+          -->
+            <tr>
+              <th scope="col">{{ o[2] }}</th> 
+              <th scope="col">{{ o[0] }}</th>
+              <th scope="col">
+                {% for d in o[1] %}
+                    <p> {{ d[0] }} </p>
+                {% endfor %}</th>
+              <th scope="col">
+                {% for d in o[1] %}
+                    <p> {{ d[1] }} </p>
+                {% endfor %}</th>
+              <th scope="col">
+                {% for d in o[1] %}
+                    {% if d[0] == True %}
+                        <p> Decaf </p>
+                    {% else %}
+                        <p> Regular </p>
+                    {% endif %}
+                {% endfor %}</th>
+              <th scope="col">
+                {% for d in o[1] %}
+                    <p> {{ d[3] }} </p>
+                {% endfor %}</th>
+              <th scope="col">
+                {% for d in o[1] %}
+                <p> {{ d[4] }}  </p>
+                {% endfor %}</th>
+              <th scope="col"> <p> {{ o[3] }} </p> </th>
+              <th scope="col"> <form action="" method="post" novalidate>
+              <button type="submit" id="id_{{o[4]}}" name="complete_order" value="{{o[4]}}">Complete Order</button> </form> </th>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        </div>
+    
+        
+    </body>
+
+    <body>
+      <div class="wrapper">
+        <div class="notification_wrap">
+          <div class="notification_icon" id="clicks">
+            <button type="button" class="icon-button" onclick="Date()">
+              <span class="material-icons">notifications</span>
+              {% if new_order %}
+                <span class="icon-button__badge"></span>
+              {% endif %}
+            </button>
+          </div>
+          <div class="dropdown">
+            <div class="notify_item">
+              <div class="notify_info">
+                {% for o in order_reverse %}
+                  <p> room {{ o[2] }}, {{ o[0] }} just placed an order!</p>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </body>
+{% endblock %}

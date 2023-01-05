@@ -1,0 +1,5 @@
+hello {{username}}!
+thank you for ordering from the half caf!
+a barista has started working on your order and it should be delivered to you shortly!
+here is what you have ordered
+{{order info}}

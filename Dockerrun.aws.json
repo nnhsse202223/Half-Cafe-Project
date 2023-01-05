@@ -1,0 +1,73 @@
+{
+    "AWSEBDockerrunVersion": 2,
+    "volumes": [
+      {
+        "name": "webapp",
+        "host": {
+          "sourcePath": "/var/app/current/Web-App"
+        }
+      },
+      {
+        "name": "db",
+        "host": {
+          "sourcePath": "/var/app/current/db"
+        }
+      }  
+    ],
+    "containerDefinitions": [
+      {
+        "name": "webapp",
+        "image": "nnhsse/half-caf-web-app:aws-1",
+        "essential": true,
+        "memoryReservation": 128,
+        "mountPoints": [
+          {
+            "sourceVolume": "webapp",
+            "containerPath": "/home/half-caf-web-app"
+          },
+          {
+            "sourceVolume": "awseb-logs-webapp",
+            "containerPath": "/home/half-caf-web-app/logs"
+          }
+        ],
+        "portMappings": [
+          {
+            "hostPort": 80,
+            "containerPort": 5000
+          }
+        ],
+        "links": [
+          "db"
+      	]
+      },
+      {
+        "name": "db",
+        "image": "mysql",
+        "essential": true,
+        "memory": 128,
+        "mountPoints": [
+            {
+              "sourceVolume": "db",
+              "containerPath": "/docker-entrypoint-initdb.d",
+              "readOnly": true
+            },
+            {
+              "sourceVolume": "awseb-logs-db",
+              "containerPath": "/var/log/mysql"
+            }
+          ],
+        "portMappings": [
+          {
+            "hostPort": 3306,
+            "containerPort": 3306
+          }
+        ],
+        "environment": [
+          {
+            "name": "MYSQL_ROOT_PASSWORD",
+            "value": "halfcafwebappadmins123"
+          }
+        ]
+      }
+    ]
+  }

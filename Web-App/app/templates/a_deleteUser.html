@@ -1,0 +1,11 @@
+{% extends "admin.html" %}
+
+{% block content %}
+<form action="" method="post" novalidate>
+<div>
+    <p>Delete User</p>
+    <p>{{ deleteUserForm.user.label }} {{ deleteUserForm.user }}</p>
+    <p>{{ deleteUserForm.submit }}</p><br>
+    </div>
+</form>
+{% endblock %}

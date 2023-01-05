@@ -1,0 +1,76 @@
+{% extends "layout.html" %}
+
+
+{% block content %}
+<head>
+    <style>
+    body{margin: 10px
+        }
+
+    .card-title{color:#ff9138 ;
+        }
+    </style>
+    </head>
+
+
+<div id="center">
+<form action="" method="post">
+        
+        <div class="container">
+
+        <div class="row">
+
+          <div class="col-lg-12">
+
+            <div>
+            <h3>My Order</h3>
+            </div>
+
+            <div class="row">
+
+                {% if order.drink.__len__() == 0 %}
+                    <p>No drinks yet...</p>
+                {% else %}
+                    {% for o in order.drink %}
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="card h-100">
+                          <div class="card-body">
+                            <h4 class="card-title">
+                                {{ o.menuItem }}
+                            </h4>
+                            <h5>{{ o.flavors }}</h5>
+
+                            
+                          </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            
+            </div>
+            <!-- /.row -->
+            <div class="row">
+            <p>Room Number</p>
+            </div>
+
+            <div class="rpw">
+            <p>{{ form.room }}</p>
+            </div>
+            
+            <div class="row">
+            <p>{{ form.submit }}</p>
+            </div>
+
+          </div>
+          <!-- /.col-lg-12 -->
+         
+
+        </div>
+        <!-- /.row -->
+
+      </div>
+        
+    </form>
+</div>
+
+{% endblock %}

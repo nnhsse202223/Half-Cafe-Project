@@ -1,0 +1,13 @@
+{% extends "admin.html" %}
+
+{% block content %}
+<form action="" method="post" novalidate>
+<div>
+    <p>Modify Drink</p>
+    <p> You are able to modify drink flavors here.     </p>
+    <p>{{ modifyDrinkForm.drink.label }} {{ modifyDrinkForm.drink }}</p>
+    <p>{{ modifyDrinkForm.flavor.label }} {{ modifyDrinkForm.flavor(rows=4, multiple=True) }}</p> <!--this adds the weird drop down part-->
+    <p>{{ modifyDrinkForm.submit }}</p><br>
+    </div>
+</form>
+{% endblock %}
