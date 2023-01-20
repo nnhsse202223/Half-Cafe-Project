@@ -1,4 +1,14 @@
+{% extends "layout.html" %}
 
+{% block content %}
+    <head>
+
+        <a class="nav-link" href="{{ url_for('main.home') }}">Home</a>
+    </head>
+    <h1>Thanks for ordering!</h1>
+    <h2>Your order is: <a href="{{ url_for('main.custDrink', drinkId=m.id) }}"> {{ m.name }} </a> </h2>
+    
+{% endblock %}
 
 
 {% extends "layout.html" %}

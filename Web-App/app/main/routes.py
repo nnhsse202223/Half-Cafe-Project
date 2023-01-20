@@ -187,7 +187,7 @@ def myOrder(orderId):
                 new_order_id = Order.query.all()[-1].id
                 current_user.current_order_id=new_order_id
                 db.session.commit()
-                return redirect(url_for('main.myOrder', orderId=current_user.current_order_id))
+                return redirect(url_for('main.myOrder', orderId=current_user.current_order_id)) #previously return redirect(url_for('main.myOrder', orderId=current_user.current_order_id))
         elif halfcaf.acc_order == False:
                 flash("This is not a time for ordering drinks ")
                 return redirect(url_for('main.home'))
@@ -520,9 +520,6 @@ def a_userDashboard():
 
                 db.session.commit()
                 return redirect(url_for('main.a_userDashboard'))
-
-
-
 
         return render_template('a_userDashboard.html', title='User Dashboard', userDashboardForm=userDashboard)
 
