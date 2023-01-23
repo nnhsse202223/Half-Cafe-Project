@@ -33,6 +33,11 @@ def home():
 
         return render_template('home.html', title='Home Page', menuItems=menuItems)
 
+@bp.route('/justOrdered', methods=['GET'])
+def justOrdered(orderId):
+        orderId=current_user.current_order_id
+        return render_template("justOrdered.html")
+
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
@@ -176,6 +181,8 @@ def myOrder(orderId):
         halfcaf = HalfCaf.query.get(1)
         form = OrderForm()
 
+        o = Order.query.get(current_user.current_order_id)
+
         if request.method == 'POST' and order.drink != [] and halfcaf.acc_order==True:
                 order.roomnum_id = form.room.data
                 order.timestamp = datetime.datetime.now()
@@ -187,7 +194,7 @@ def myOrder(orderId):
                 new_order_id = Order.query.all()[-1].id
                 current_user.current_order_id=new_order_id
                 db.session.commit()
-                return redirect(url_for('main.myOrder', orderId=current_user.current_order_id)) #previously return redirect(url_for('main.myOrder', orderId=current_user.current_order_id))
+                return redirect(url_for('main.justOrdered', order=order, orderId=current_user.current_order_id)) #previously return redirect(url_for('main.myOrder', orderId=current_user.current_order_id))
         elif halfcaf.acc_order == False:
                 flash("This is not a time for ordering drinks ")
                 return redirect(url_for('main.home'))
