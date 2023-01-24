@@ -1,5 +1,5 @@
 from operator import truediv
-from flask import render_template, flash, redirect, url_for
+from flask import render_template, flash, redirect, url_for, request
 from app import app
 from app import db
 from app.main.forms import RegistrationForm, TeacherRegistrationForm, LoginForm, CustomizeForm, OrderForm, FavoriteDrinksForm, BaristaForm, A_AddUserForm, A_DeleteUserForm, A_AddDrinkForm, A_DeleteDrinkForm, A_AddFlavorForm, A_DeleteFlavorForm, A_UserDashboardForm, A_ModifyDrinkForm, ResetPasswordRequestForm, ResetPasswordForm
@@ -34,9 +34,11 @@ def home():
         return render_template('home.html', title='Home Page', menuItems=menuItems)
 
 @bp.route('/justOrdered', methods=['GET'])
-def justOrdered(orderId):
+def justOrdered():
         orderId=current_user.current_order_id
-        return render_template("justOrdered.html")
+        order = Order.query.get(orderId)
+        test =  order#request.args.get('orderId')
+        return render_template("justOrdered.html", order=order)
 
 
 @bp.route('/login', methods=['GET', 'POST'])
