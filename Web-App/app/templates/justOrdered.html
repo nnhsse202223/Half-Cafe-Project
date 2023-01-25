@@ -2,12 +2,15 @@
 
 {% block content %}
 
-<head>
-    <a class="nav-link" href="{{ url_for('main.justOrdered') }}">Home</a> </head>
 <h1>Thanks for ordering!</h1>
 <h2>Your order is: </h2>
-{% for o in order.drink %}
-    <h3> {{ o.menuItem }} </h3>
+<h3>{{orderId}}</h3>
+
+
+{% for o in myDrink %} 
+    <p> {{ o.menuItem }} </p>
 {% endfor %}
-<!-- <p>{{test.drink}}</p> -->
+
 {% endblock %}
+
+

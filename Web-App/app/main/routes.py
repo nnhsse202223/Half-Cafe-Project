@@ -33,12 +33,11 @@ def home():
 
         return render_template('home.html', title='Home Page', menuItems=menuItems)
 
-@bp.route('/justOrdered', methods=['GET'])
-def justOrdered():
-        orderId=current_user.current_order_id
+@bp.route('/justOrdered/<orderId>', methods=['GET'])
+def justOrdered(orderId):
         order = Order.query.get(orderId)
-        test =  order#request.args.get('orderId')
-        return render_template("justOrdered.html", order=order)
+        myDrink = order.drink
+        return render_template("justOrdered.html", title='Your Order', orderId=orderId, myDrink=myDrink)
 
 
 @bp.route('/login', methods=['GET', 'POST'])
@@ -196,7 +195,7 @@ def myOrder(orderId):
                 new_order_id = Order.query.all()[-1].id
                 current_user.current_order_id=new_order_id
                 db.session.commit()
-                return redirect(url_for('main.justOrdered', order=order, orderId=current_user.current_order_id)) #previously return redirect(url_for('main.myOrder', orderId=current_user.current_order_id))
+                return redirect(url_for('main.justOrdered', orderId=orderId)) #previously return redirect(url_for('main.myOrder', orderId=current_user.current_order_id))
         elif halfcaf.acc_order == False:
                 flash("This is not a time for ordering drinks ")
                 return redirect(url_for('main.home'))
