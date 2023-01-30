@@ -2,13 +2,18 @@
 
 {% block content %}
 
-<h1>Thanks for ordering!</h1>
-<h2>Your order is: </h2>
-<h3>{{orderId}}</h3>
+<br>
+<h1 style="font-size: 300%"><b>Thanks for ordering!</b></h1>
+<br>
+<h2 style="font-size:150%">Order Number: {{orderId}}</h3>
+<h3 style="font-size:150%">Your order is: </h2>
+
 
 
 {% for o in myDrink %} 
-    <p> {{ o.menuItem }} </p>
+    <p style="font-size:125%; color:red";> {{ o.menuItem }} </p>
+    
+    
 {% endfor %}
 
 {% endblock %}
