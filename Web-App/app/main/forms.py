@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, SelectMultipleField, TextAreaField, widgets, RadioField, FieldList, FormField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, IntegerField, SelectMultipleField, TextAreaField, widgets, RadioField, FieldList, FormField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo
 from app.models import User, Flavor, MenuItem, Drink, Order, Temp, RoomNum, DrinksToFlavor
 
@@ -55,7 +55,8 @@ class CustomizeForm(FlaskForm):
     fav = BooleanField(u'Favorite')
     inst = TextAreaField(u'Special Instructions')
 
-    submit = SubmitField('Add to Order')
+    adding = IntegerField("Add To Order")
+    submit = SubmitField('Submit Order')
 
     def __init__(self, drinkI):
         super(CustomizeForm, self).__init__()

@@ -122,6 +122,8 @@ class FavoriteDrink(db.Model):
     decaf = db.Column(db.Boolean, index=True, default=False)
     flavorId = db.Column(db.Integer, db.ForeignKey('flavor.id'), index=True)
 
+class Adding():
+    __tablename__ = 'adding'
 
 class HalfCaf(db.Model):
     __tablename__ = 'HalfCaf'
