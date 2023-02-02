@@ -55,7 +55,7 @@ class CustomizeForm(FlaskForm):
     fav = BooleanField(u'Favorite')
     inst = TextAreaField(u'Special Instructions')
 
-    adding = SelectField("Add To Order", choices=[(1,2)]) #only allows 2 choices?
+    adding = SelectField("Add To Order", choices=[(1,1),(2,2),(3,3),(4,4),(5,5)]) 
     submit = SubmitField('Submit Order')
 
     def __init__(self, drinkI):

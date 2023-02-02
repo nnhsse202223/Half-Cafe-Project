@@ -147,23 +147,22 @@ def custDrink(drinkId):
 
         form = CustomizeForm(drinkId)
         m = MenuItem.query.get(drinkId)
+
+        adding=form.adding.data
         if request.method == 'POST':
-                
-                adding=form.adding.data
 
-                values = range(adding)
-
-                d = Drink(menuItem=m.name,
+                value = range(int(adding))
+                for i in value:
+                        d = Drink(menuItem=m.name,
                           temp_id=form.temp.data,
                           decaf=form.decaf.data,
                           flavors=form.flavors.data,
                           order_id=current_user.current_order_id,
                           inst=form.inst.data)
 
-                for i in values:
                         db.session.add(d)
-                        db.session.commit()
                 
+                db.session.commit()
                 #db.session.commit()
 
                 o = Order.query.get(current_user.current_order_id)
