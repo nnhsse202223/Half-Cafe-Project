@@ -55,7 +55,7 @@ class CustomizeForm(FlaskForm):
     fav = BooleanField(u'Favorite')
     inst = TextAreaField(u'Special Instructions')
 
-    adding = SelectField("Add To Order", choices=[(1,1),(2,2),(3,3),(4,4),(5,5)]) 
+    adding = SelectField("Add To Order", choices=[(1,1),(2,2),(3,3),(4,4),(5,5), (6,6), (7,7), (8,8), (9,9), (10,10)]) 
     submit = SubmitField('Submit Order')
 
     def __init__(self, drinkI):
