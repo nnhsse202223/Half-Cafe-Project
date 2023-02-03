@@ -14,7 +14,7 @@
 
 
 <div id="center">
-<form action="" method="post">
+<form action="" method="post" novalidate>
         
         <div class="container">
 
@@ -54,7 +54,10 @@
             </div>
 
             <div class="row">
-            <p>{{ form.room }}
+            <p> {% for error in form.room.errors %}
+              <spam style ="color: red;"> {{ error }}</spam>
+              {% endfor %}
+              {{ form.room }}
             </p>  
             
 

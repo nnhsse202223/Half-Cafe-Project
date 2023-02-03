@@ -176,7 +176,10 @@ def myOrder(orderId):
         halfcaf = HalfCaf.query.get(1)
         form = OrderForm()
 
-        if request.method == 'POST' and order.drink != [] and halfcaf.acc_order==True:
+        if form.validate_on_submit():
+                flash("Please put in a valid room number.")
+                return redirect(url_for('main.myOrder', orderId=current_user.current_order_id))
+        elif request.method == 'POST' and form.validate() and order.drink != [] and halfcaf.acc_order==True:
                 order.roomnum_id = form.room.data
                 order.timestamp = datetime.datetime.now()
                 order.read = datetime.datetime.now()
