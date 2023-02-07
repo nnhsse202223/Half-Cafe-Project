@@ -6,7 +6,7 @@ from app.main.forms import RegistrationForm, TeacherRegistrationForm, LoginForm,
 from flask_login import current_user
 from flask_login import login_user
 from app import models
-from app.models import User, Flavor, MenuItem, Drink, Order, Temp, RoomNum, DrinksToFlavor, FavoriteDrink, HalfCaf
+from app.models import User, Flavor, MenuItem, Drink, Order, Temp, RoomNum, DrinksToFlavor, FavoriteDrink, HalfCaf, DrinksToTemp
 from flask_login import logout_user, login_required
 from flask import request
 from werkzeug.urls import url_parse
@@ -260,7 +260,8 @@ def barista():
                                 roomnum = RoomNum.query.get(o.roomnum_id)
                                 for d in o.drink:
                                         temp = Temp.query.get(d.temp_id)
-                                        drink = (d.menuItem, temp.temp, d.decaf, d.flavors, d.inst) #added the inst thing
+                                        flavorString = Flavor.query.get(d.flavors)
+                                        drink = (d.menuItem, temp.temp, d.decaf, str(flavorString)[8:-1], d.inst) #added the inst thing
                                         drink_list.append(drink)
 
                                 order = (teacher.username, drink_list, roomnum.num, o.timestamp.strftime("%Y-%m-%d at %H:%M"), o.id, o.read)
@@ -276,6 +277,7 @@ def barista():
                                 
         print(order_list)
         if request.method == 'POST':
+                
                 completed_order_id = request.form.get("complete_order")
                 completed_order = Order.query.get(completed_order_id)
                 completed_order.complete = True
@@ -424,6 +426,14 @@ def a_modifyDrink():
 
                                 drinkFlavor = DrinksToFlavor(drink=drink1.name, flavor=f.name, drinkId = drink1.id, flavorId=f.id)
                                 db.session.add(drinkFlavor)
+                if modifyDrink.temp.data and modifyDrink.drink.data: #new code - adds temp customization to admin form (line 188 in forms)
+                        for t in DrinksToTemp.query.filter_by(drinkId = drink1.id):
+                                db.session.delete(t)
+                        for TempId in modifyDrink.temp.data:
+                                t = Temp.query.get(TempId)
+
+                                drinkTemp = DrinksToTemp(drink=drink1.name, temp=t.temp, drinkId = drink1.id, tempId=t.id)
+                                db.session.add(drinkTemp)
 
                 db.session.commit()
                 return redirect(url_for('main.a_modifyDrink'))
@@ -457,7 +467,7 @@ def a_addFlavor():
 
         addFlavor = A_AddFlavorForm()
 
-        if request.method == 'POST':
+        if request.method == 'POST': #take the number from post call and relate it to the flavor
                 flavor = Flavor(name=addFlavor.name.data)
                 db.session.add(flavor)
                 db.session.commit()

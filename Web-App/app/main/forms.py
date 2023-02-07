@@ -180,11 +180,16 @@ class A_ModifyDrinkForm(FlaskForm):
     drink = SelectField('Drink', coerce=str)
     submit = SubmitField('Modify Drink')
     flavor = SelectMultipleField('Flavors') #the varable for the drop down part for flavors
+    temp = SelectMultipleField('Temperatures')
+    #caffeine = SelectMultipleField('Decaf/Not Decaf')
+    #description = TextAreaField('Add Description')
+    #price = TextAreaField('Add Price')
 
     def __init__(self):
         super(A_ModifyDrinkForm, self).__init__()
         self.drink.choices = [(i.id, i.name) for i in MenuItem.query.order_by(MenuItem.id)]
         self.flavor.choices = [(i.id, i.name) for i in Flavor.query.order_by(Flavor.id)]
+        self.temp.choices = [(i.id, i.temp) for i in Temp.query.order_by(Temp.id)] #new code - see line 429 in routes ('i.temp' is the same as 'i.name' in flavor)
 
 class A_DeleteDrinkForm(FlaskForm):
     drink = SelectField('Drink', coerce=str)
