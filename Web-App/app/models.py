@@ -58,7 +58,7 @@ class Order(db.Model):
 def load_user(id):
     return User.query.get(int(id))
 
-class Flavor(db.Model):
+class Flavor(db.Model): #fix flavor numbering
     __tablename__ = 'flavor'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), index=True)
@@ -82,6 +82,16 @@ class Temp(db.Model):
     __tablename__='temp'
     id = db.Column(db.Integer, primary_key=True)
     temp = db.Column(db.String(20), index=True)
+    def __repr__(self):
+            return '<Temp {}>'.format(self.temp)
+
+class DrinksToTemp(db.Model):
+    __tablename__ = 'drinksToTemp'
+    id = db.Column(db.Integer, primary_key = True)
+    drink = db.Column(db.String(50), index = True)
+    drinkId = db.Column(db.Integer, index = True)
+    temp = db.Column(db.String(50), index=True)
+    tempId = db.Column(db.Integer, db.ForeignKey('temp.id'), index=True)
 
 class RoomNum(db.Model):
     __tablename__= 'roomnum'
