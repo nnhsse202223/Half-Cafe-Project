@@ -91,11 +91,14 @@ class FavoriteDrinksForm(FlaskForm):
 
 class OrderForm(FlaskForm):
     
-    #room = SelectField(u'Room Number:', coerce=int, validators=[DataRequired()])
+    room = SelectField(u'Room Number:', coerce=int, validators=[DataRequired()])
 
-    room = IntegerField('Room Number:', validators=[InputRequired(), NumberRange(min=100, max=292, message='Please enter a valid room number')])
+    #room = IntegerField('Room Number:', validators=[InputRequired(), NumberRange(min=100, max=292, message='Please enter a valid room number')])
     submit = SubmitField('Order')
 
+    def __init__(self):
+        super(OrderForm, self).__init__()
+        self.room.choices = [(r.id, r.num) for r in RoomNum.query.order_by(RoomNum.id)]
 
 class BaristaForm(FlaskForm):
 

@@ -191,12 +191,10 @@ def myOrder(orderId):
 
         o = Order.query.get(current_user.current_order_id)
 
-        o = Order.query.get(current_user.current_order_id)
-
-        if form.validate_on_submit():
-                flash("Please put in a valid room number.")
-                return redirect(url_for('main.myOrder', orderId=current_user.current_order_id))
-        elif request.method == 'POST' and form.validate_on_submit() and order.drink != [] and halfcaf.acc_order==True:
+        #if form.validate_on_submit():
+                #flash("Please put in a valid room number.")
+                #return redirect(url_for('main.myOrder', orderId=current_user.current_order_id))
+        if request.method == 'POST'  and order.drink != [] and halfcaf.acc_order==True:
                 order.roomnum_id = form.room.data
                 order.timestamp = datetime.datetime.now()
                 order.read = datetime.datetime.now()
