@@ -1,12 +1,12 @@
 from operator import truediv
-from flask import render_template, flash, redirect, url_for
+from flask import render_template, flash, redirect, url_for, request
 from app import app
 from app import db
 from app.main.forms import RegistrationForm, TeacherRegistrationForm, LoginForm, CustomizeForm, OrderForm, FavoriteDrinksForm, BaristaForm, A_AddUserForm, A_DeleteUserForm, A_AddDrinkForm, A_DeleteDrinkForm, A_AddFlavorForm, A_DeleteFlavorForm, A_UserDashboardForm, A_ModifyDrinkForm, ResetPasswordRequestForm, ResetPasswordForm
 from flask_login import current_user
 from flask_login import login_user
 from app import models
-from app.models import User, Flavor, MenuItem, Drink, Order, Temp, RoomNum, DrinksToFlavor, FavoriteDrink, HalfCaf
+from app.models import User, Flavor, MenuItem, Drink, Order, Temp, RoomNum, DrinksToFlavor, FavoriteDrink, HalfCaf, DrinksToTemp
 from flask_login import logout_user, login_required
 from flask import request
 from werkzeug.urls import url_parse
@@ -32,6 +32,12 @@ def home():
         menuItems = MenuItem.query.all()
 
         return render_template('home.html', title='Home Page', menuItems=menuItems)
+
+@bp.route('/justOrdered/<orderId>', methods=['GET'])
+def justOrdered(orderId):
+        order = Order.query.get(orderId)
+        myDrink = order.drink
+        return render_template("justOrdered.html", title='Your Order', orderId=orderId, myDrink=myDrink)
 
 
 @bp.route('/login', methods=['GET', 'POST'])
@@ -141,16 +147,23 @@ def custDrink(drinkId):
 
         form = CustomizeForm(drinkId)
         m = MenuItem.query.get(drinkId)
+
+        adding=form.adding.data
         if request.method == 'POST':
 
-                d = Drink(menuItem=m.name,
+                value = range(int(adding))
+                for i in value:
+                        d = Drink(menuItem=m.name,
                           temp_id=form.temp.data,
                           decaf=form.decaf.data,
                           flavors=form.flavors.data,
                           order_id=current_user.current_order_id,
                           inst=form.inst.data)
-                db.session.add(d)
+
+                        db.session.add(d)
+                
                 db.session.commit()
+                #db.session.commit()
 
                 o = Order.query.get(current_user.current_order_id)
 
@@ -176,10 +189,14 @@ def myOrder(orderId):
         halfcaf = HalfCaf.query.get(1)
         form = OrderForm()
 
+        o = Order.query.get(current_user.current_order_id)
+
+        o = Order.query.get(current_user.current_order_id)
+
         if form.validate_on_submit():
                 flash("Please put in a valid room number.")
                 return redirect(url_for('main.myOrder', orderId=current_user.current_order_id))
-        elif request.method == 'POST' and form.validate() and order.drink != [] and halfcaf.acc_order==True:
+        elif request.method == 'POST' and form.validate_on_submit() and order.drink != [] and halfcaf.acc_order==True:
                 order.roomnum_id = form.room.data
                 order.timestamp = datetime.datetime.now()
                 order.read = datetime.datetime.now()
@@ -190,7 +207,7 @@ def myOrder(orderId):
                 new_order_id = Order.query.all()[-1].id
                 current_user.current_order_id=new_order_id
                 db.session.commit()
-                return redirect(url_for('main.myOrder', orderId=current_user.current_order_id))
+                return redirect(url_for('main.justOrdered', orderId=orderId)) #previously return redirect(url_for('main.myOrder', orderId=current_user.current_order_id))
         elif halfcaf.acc_order == False:
                 flash("This is not a time for ordering drinks ")
                 return redirect(url_for('main.home'))
@@ -263,7 +280,8 @@ def barista():
                                 roomnum = RoomNum.query.get(o.roomnum_id)
                                 for d in o.drink:
                                         temp = Temp.query.get(d.temp_id)
-                                        drink = (d.menuItem, temp.temp, d.decaf, d.flavors, d.inst) #added the inst thing
+                                        flavorString = Flavor.query.get(d.flavors)
+                                        drink = (d.menuItem, temp.temp, d.decaf, str(flavorString)[8:-1], d.inst) #added the inst thing
                                         drink_list.append(drink)
 
                                 order = (teacher.username, drink_list, roomnum.num, o.timestamp.strftime("%Y-%m-%d at %H:%M"), o.id, o.read)
@@ -279,6 +297,7 @@ def barista():
                                 
         print(order_list)
         if request.method == 'POST':
+                
                 completed_order_id = request.form.get("complete_order")
                 completed_order = Order.query.get(completed_order_id)
                 completed_order.complete = True
@@ -427,6 +446,14 @@ def a_modifyDrink():
 
                                 drinkFlavor = DrinksToFlavor(drink=drink1.name, flavor=f.name, drinkId = drink1.id, flavorId=f.id)
                                 db.session.add(drinkFlavor)
+                if modifyDrink.temp.data and modifyDrink.drink.data: #new code - adds temp customization to admin form (line 188 in forms)
+                        for t in DrinksToTemp.query.filter_by(drinkId = drink1.id):
+                                db.session.delete(t)
+                        for TempId in modifyDrink.temp.data:
+                                t = Temp.query.get(TempId)
+
+                                drinkTemp = DrinksToTemp(drink=drink1.name, temp=t.temp, drinkId = drink1.id, tempId=t.id)
+                                db.session.add(drinkTemp)
 
                 db.session.commit()
                 return redirect(url_for('main.a_modifyDrink'))
@@ -460,7 +487,7 @@ def a_addFlavor():
 
         addFlavor = A_AddFlavorForm()
 
-        if request.method == 'POST':
+        if request.method == 'POST': #take the number from post call and relate it to the flavor
                 flavor = Flavor(name=addFlavor.name.data)
                 db.session.add(flavor)
                 db.session.commit()
@@ -523,9 +550,6 @@ def a_userDashboard():
 
                 db.session.commit()
                 return redirect(url_for('main.a_userDashboard'))
-
-
-
 
         return render_template('a_userDashboard.html', title='User Dashboard', userDashboardForm=userDashboard)
 
