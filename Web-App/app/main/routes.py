@@ -206,8 +206,17 @@ def myOrder(orderId):
         elif halfcaf.acc_order == False:
                 flash("This is not a time for ordering drinks ")
                 return redirect(url_for('main.home'))
-
-        return render_template('myOrder.html', title='My Order', form=form, order=order)
+        #drink_flavors = []
+        #for d in o.drink:
+                #drink_flavors.append(str(Flavor.query.get(d.flavors)))
+        
+        drink_list = []
+        for d in o.drink:
+                temp = Temp.query.get(d.temp_id)
+                flavorString = Flavor.query.get(d.flavors)
+                drink = (d.menuItem, temp.temp, d.decaf, str(flavorString)[8:-1], d.inst) #added the inst thing
+                drink_list.append(drink)
+        return render_template('myOrder.html', title='My Order', form=form, order=order,flavors=drink_list)
 
         
 @bp.route('/favoriteDrinks', methods=['GET','POST'])
