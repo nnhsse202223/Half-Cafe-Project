@@ -14,7 +14,7 @@
 
 
 <div id="center">
-<form action="" method="post">
+<form action="" method="post" novalidate>
         
         <div class="container">
 
@@ -40,8 +40,9 @@
                             <h4 class="card-title">
                                 {{ o.menuItem }}
                             </h4>
+                            <p> Decaf: {{ o.decaf}} </p>
+                            <p> Special Instructions: {{ o.inst }}</p>
                             <h5>{{ o.flavors }}</h5>
-
                             
                           </div>
                         </div>
@@ -52,14 +53,20 @@
             </div>
             <!-- /.row -->
             <div class="row">
-            <p>Room Number</p>
+            <b><p>Room Number</b> (If "Other", please specify in the special instructions)</p> 
             </div>
 
             <div class="row">
-            <p>{{ form.room }}</p>
+            <p> {% for error in form.room.errors %}
+              <spam style ="color: red;"> {{ error }}</spam>
+              {% endfor %}
+              {{ form.room }}
+            </p>  
+            
+
             </div>
             
-            <div class="row">
+           <div class="row">
             <p>{{ form.submit }}</p>
             </div>
 

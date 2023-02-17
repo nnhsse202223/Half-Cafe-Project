@@ -1,4 +1,6 @@
 from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, SelectMultipleField, TextAreaField, widgets, RadioField, FieldList, FormField, IntegerField
+from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, InputRequired, NumberRange
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, IntegerField, SelectMultipleField, TextAreaField, widgets, RadioField, FieldList, FormField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo
 from app.models import User, Flavor, MenuItem, Drink, Order, Temp, RoomNum, DrinksToFlavor
@@ -55,7 +57,7 @@ class CustomizeForm(FlaskForm):
     fav = BooleanField(u'Favorite')
     inst = TextAreaField(u'Special Instructions')
 
-    adding = SelectField("Add To Order", choices=[(1,1),(2,2),(3,3),(4,4),(5,5), (6,6), (7,7), (8,8), (9,9), (10,10)]) 
+    adding = SelectField("Add To Order", choices=[(1,1),(2,2),(3,3)]) 
     submit = SubmitField('Submit Order')
 
     def __init__(self, drinkI):
@@ -88,13 +90,14 @@ class FavoriteDrinksForm(FlaskForm):
         
 
 class OrderForm(FlaskForm):
+    
     room = SelectField(u'Room Number:', coerce=int, validators=[DataRequired()])
 
+    #room = IntegerField('Room Number:', validators=[InputRequired(), NumberRange(min=100, max=292, message='Please enter a valid room number')])
     submit = SubmitField('Order')
 
     def __init__(self):
         super(OrderForm, self).__init__()
-
         self.room.choices = [(r.id, r.num) for r in RoomNum.query.order_by(RoomNum.id)]
 
 class BaristaForm(FlaskForm):
