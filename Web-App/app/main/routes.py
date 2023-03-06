@@ -304,6 +304,10 @@ def barista():
                                         new = False
                                 
         print(order_list)
+        if request.method == "YES": #cancelOrder variable
+                deleted_order_id = request.form.get("deleted_order")
+                deleted_order = Order.query.get(deleted_order_id)
+                return(redirect(url_for('main.home')))
         if request.method == 'POST':
                 
                 completed_order_id = request.form.get("complete_order")
