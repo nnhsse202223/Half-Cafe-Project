@@ -186,7 +186,7 @@ class A_ModifyDrinkForm(FlaskForm):
     flavor = SelectMultipleField('Flavors') #the varable for the drop down part for flavors
     temp = SelectMultipleField('Temperatures')
     #caffeine = SelectMultipleField('Decaf/Not Decaf')
-    #description = TextAreaField('Add Description')
+    description = TextAreaField('Add Description')
     #price = TextAreaField('Add Price')
 
     def __init__(self):

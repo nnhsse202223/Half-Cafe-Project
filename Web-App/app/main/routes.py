@@ -211,7 +211,7 @@ def myOrder(orderId):
                 flash("This is not a time for ordering drinks ")
                 return redirect(url_for('main.home'))
         #drink_flavors = []
-        #for d in o.drink:
+        #for d in o.drink:      
                 #drink_flavors.append(str(Flavor.query.get(d.flavors)))
         
         drink_list = []
