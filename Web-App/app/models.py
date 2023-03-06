@@ -77,6 +77,21 @@ class MenuItem(db.Model):
 
     def __repr__(self):
             return '<MenuItem {}>'.format(self.name)
+    
+class Desc(db.Model):
+    __tablename__='desc'
+    id = db.Column(db.Integer, primary_key=True)
+    temp = db.Column(db.String(20), index=True)
+    def __repr__(self):
+            return '<Desc {}>'.format(self.desc)
+    
+class DrinksToDesc(db.Model):
+    __tablename__ = 'drinksToDesc'
+    id = db.Column(db.Integer, primary_key = True)
+    drink = db.Column(db.String(50), index = True)
+    drinkId = db.Column(db.Integer, index = True)
+    desc = db.Column(db.String(50), index=True)
+    descId = db.Column(db.Integer, db.ForeignKey('desc.id'), index=True)
 
 class Temp(db.Model):
     __tablename__='temp'
