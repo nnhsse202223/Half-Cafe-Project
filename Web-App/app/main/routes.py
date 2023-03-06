@@ -112,7 +112,8 @@ def teacherRegister():
                 user = User(username=form.username.data, user_type=form.user_type.data, current_order_id=None, isActivated=False, email=form.email.data)
                 user.set_password(form.password.data)
                 db.session.add(user)
-                reg_email(user)
+                
+                #reg_email(user)
                 db.session.commit()
                 user = User.query.filter_by(username=form.username.data).first()
 
@@ -398,15 +399,10 @@ def a_deleteUser():
 
         if request.method == 'POST':
                 user = User.query.get(deleteUser.user.data)
-
                 user.current_order_id = None #added
-
                 for o in Order.query.all():
-
-                        if o.teacher_id == user.id:
-                        
+                        if o.teacher_id == user.id:        
                                 for d in o.drink:
-
                                         db.session.delete(d)
                                 db.session.delete(o)
 
