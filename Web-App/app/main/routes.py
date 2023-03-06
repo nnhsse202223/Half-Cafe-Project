@@ -78,7 +78,7 @@ def logout():
 @bp.route('/email')
 def email():
         return redirect(url_for('main.login'))
-        # http://localhost:5000/email  #Leads to internal server error but send email
+        # http://localhost:5000/email  #Leads to internal server error but sends email
         # send_email('[Microblog] Reset Your Password', sender=app.config['ADMINS'][0], recipients=app.config['ADMINS'], text_body='hi')
 
 @bp.route('/supersecretpage', methods=['GET', 'POST'])
