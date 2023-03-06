@@ -175,10 +175,11 @@ def custDrink(drinkId):
                 return redirect(url_for('main.myOrder', orderId=o.id))
         return render_template('customize.html', title='Customize Drink', form=form, m=m)
 
+#displays the order that the user requested to the user
 @bp.route('/myOrder/<orderId>', methods=['GET', 'POST'])
 def myOrder(orderId):
 
-        if current_user.is_anonymous:
+        if current_user.is_anonymous: #redirects to user login if not signed in
                 return redirect(url_for('main.login'))
         elif current_user.user_type == "Barista":
                 return redirect(url_for('main.barista'))
@@ -210,7 +211,7 @@ def myOrder(orderId):
                 flash("This is not a time for ordering drinks ")
                 return redirect(url_for('main.home'))
         #drink_flavors = []
-        #for d in o.drink:
+        #for d in o.drink:      
                 #drink_flavors.append(str(Flavor.query.get(d.flavors)))
         
         drink_list = []
@@ -219,7 +220,7 @@ def myOrder(orderId):
                 flavorString = Flavor.query.get(d.flavors)
                 drink = (d.menuItem, temp.temp, d.decaf, str(flavorString)[8:-1], d.inst) #added the inst thing
                 drink_list.append(drink)
-        return render_template('myOrder.html', title='My Order', form=form, order=order,flavors=drink_list)
+        return render_template('myOrder.html', title='My Order', form=form, order=order,flavors= flavorString)
 
         
 @bp.route('/favoriteDrinks', methods=['GET','POST'])
@@ -266,9 +267,10 @@ def favoriteDrinks():
 
 @bp.route('/barista', methods=['GET', 'POST'])
 def barista():
-        if current_user.is_anonymous or current_user.user_type != 'Barista':
+        if current_user.is_anonymous or current_user.user_type != 'Barista': #redirects the user to login screen if they are not signed in
                 return redirect(url_for('main.login'))
 
+        #init vars
         form = BaristaForm()
         store = HalfCaf.query.get(1)
         orders = Order.query.all()
@@ -281,14 +283,14 @@ def barista():
 
         for o in orders:
                 drink_list = []
-                if o.roomnum_id != None:
-                        if not o.complete:
-                                teacher = User.query.get(o.teacher_id)
-                                roomnum = RoomNum.query.get(o.roomnum_id)
-                                for d in o.drink:
+                if o.roomnum_id != None: #roomnum exists
+                        if not o.complete: #drink not completed
+                                teacher = User.query.get(o.teacher_id) #customer
+                                roomnum = RoomNum.query.get(o.roomnum_id) 
+                                for d in o.drink: #creates drink variable for the order based off inputs from customer
                                         temp = Temp.query.get(d.temp_id)
                                         flavorString = Flavor.query.get(d.flavors)
-                                        drink = (d.menuItem, temp.temp, d.decaf, str(flavorString)[8:-1], d.inst) #added the inst thing
+                                        drink = (d.menuItem, temp.temp, d.decaf, str(flavorString)[8:-1], d.inst) #Drink variable 
                                         drink_list.append(drink)
 
                                 order = (teacher.username, drink_list, roomnum.num, o.timestamp.strftime("%Y-%m-%d at %H:%M"), o.id, o.read)
