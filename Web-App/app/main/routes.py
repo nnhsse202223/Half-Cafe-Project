@@ -6,7 +6,7 @@ from app.main.forms import RegistrationForm, TeacherRegistrationForm, LoginForm,
 from flask_login import current_user
 from flask_login import login_user
 from app import models
-from app.models import User, Flavor, MenuItem, Drink, Order, Temp, RoomNum, DrinksToFlavor, FavoriteDrink, HalfCaf, DrinksToTemp
+from app.models import User, Flavor, MenuItem, Drink, Order, Temp, Caf, RoomNum, DrinksToFlavor, FavoriteDrink, HalfCaf, DrinksToTemp, DrinksToCaf
 from flask_login import logout_user, login_required
 from flask import request
 from werkzeug.urls import url_parse
@@ -471,6 +471,8 @@ def a_modifyDrink():
 
                                 drinkCaf = DrinksToCaf(drink=drink1.name, caf = c.caf, drinkId = drink1.id, cafId = c.id)
                                 db.session.add(drinkCaf)
+                if modifyDrink.drink1.description and modifyDrink.drink.data: 
+                        #see line 431 for inspriration
 
                 db.session.commit()
                 return redirect(url_for('main.a_modifyDrink'))

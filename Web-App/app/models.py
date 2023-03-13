@@ -86,7 +86,7 @@ class Temp(db.Model):
             return '<Temp {}>'.format(self.temp)
 
 class DrinksToTemp(db.Model):
-    __tablename__ = 'drinksToCaf'
+    __tablename__ = 'drinksToTemp'
     id = db.Column(db.Integer, primary_key = True)
     drink = db.Column(db.String(50), index = True)
     drinkId = db.Column(db.Integer, index = True)
