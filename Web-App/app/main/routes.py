@@ -463,6 +463,14 @@ def a_modifyDrink():
 
                                 drinkTemp = DrinksToTemp(drink=drink1.name, temp=t.temp, drinkId = drink1.id, tempId=t.id)
                                 db.session.add(drinkTemp)
+                if modifyDrink.caf.data and modifyDrink.drink.data: #new code - adds caffeine customization to admin form
+                        for c in DrinksToCaf.query.filter_by(drinkId = drink1.id):
+                                db.session.delete(c)
+                        for CafId in modifyDrink.caf.data:
+                                c = Caf.query.get(CafId)
+
+                                drinkCaf = DrinksToCaf(drink=drink1.name, caf = c.caf, drinkId = drink1.id, cafId = c.id)
+                                db.session.add(drinkCaf)
 
                 db.session.commit()
                 return redirect(url_for('main.a_modifyDrink'))
