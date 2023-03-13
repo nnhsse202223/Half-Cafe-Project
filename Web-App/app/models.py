@@ -98,7 +98,7 @@ class Caf(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     caf = db.Column(db.String(20), index=True)
     def __repr__(self):
-            return '<Caf {}>'.format(self.temp)
+            return '<Caf {}>'.format(self.caf)
 
 class DrinksToCaf(db.Model):
     __tablename__ = 'drinksToCaf'
