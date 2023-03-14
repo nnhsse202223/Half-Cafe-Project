@@ -207,7 +207,7 @@ def myOrder(orderId):
                 db.session.commit()
                 return redirect(url_for('main.justOrdered', orderId=orderId)) 
         elif halfcaf.acc_order == False:
-                flash("This is not a time for ordering drinks ")
+                flash("The Half Caf is currently closed for online order")
                 return redirect(url_for('main.home'))
         #drink_flavors = []
         #for d in o.drink:
