@@ -304,24 +304,25 @@ def barista():
                                         new = False
                                 
         print(order_list)
-        if request.method == "YES": #cancelOrder variable
-                deleted_order_id = request.form.get("deleted_order")
-                deleted_order = Order.query.get(deleted_order_id)
-                return(redirect(url_for('main.home')))
         if request.method == 'POST':
+                print("posting")
+                if(request.form.get("deleted_order") == "cancel"):
+                        print("hello")
+                        deleted_order_id = request.form.get("deleted_order")
+                        deleted_order = Order.query.get(deleted_order_id)
+                else:
+                        completed_order_id = request.form.get("complete_order")
+                        completed_order = Order.query.get(completed_order_id)
+                        completed_order.complete = True
                 
-                completed_order_id = request.form.get("complete_order")
-                completed_order = Order.query.get(completed_order_id)
-                completed_order.complete = True
-                
-                emailDrinkList  = []
-                for i in completed_order.drink:
-                        emailDrinkList.append(i.menuItem)
+                        emailDrinkList  = []
+                        for i in completed_order.drink:
+                                emailDrinkList.append(i.menuItem)
 
-                completed_teacher_id = completed_order.teacher_id
-                completed_teacher = User.query.filter_by(id = completed_teacher_id).first()
+                        completed_teacher_id = completed_order.teacher_id
+                        completed_teacher = User.query.filter_by(id = completed_teacher_id).first()
                
-                order_email(completed_teacher.username, emailDrinkList, 'order ready!!', sender=app.config['ADMINS'][0], recipients=[completed_teacher.email])
+                        order_email(completed_teacher.username, emailDrinkList, 'order ready!!', sender=app.config['ADMINS'][0], recipients=[completed_teacher.email])
                 
                 db.session.commit()
                 return redirect(url_for('main.barista'))
