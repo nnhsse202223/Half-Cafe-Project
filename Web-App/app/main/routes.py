@@ -463,7 +463,7 @@ def a_modifyDrink():
 
                                 drinkTemp = DrinksToTemp(drink=drink1.name, temp=t.temp, drinkId = drink1.id, tempId=t.id)
                                 db.session.add(drinkTemp)
-                if modifyDrink.caf.data and modifyDrink.drink.data: #new code - adds caffeine customization to admin form
+                if modifyDrink.caffeine.data and modifyDrink.drink.data: #new code - adds caffeine customization to admin form
                         for c in DrinksToCaf.query.filter_by(drinkId = drink1.id):
                                 db.session.delete(c)
                         for CafId in modifyDrink.caf.data:
@@ -471,7 +471,9 @@ def a_modifyDrink():
 
                                 drinkCaf = DrinksToCaf(drink=drink1.name, caf = c.caf, drinkId = drink1.id, cafId = c.id)
                                 db.session.add(drinkCaf)
-                if modifyDrink.drink1.description and modifyDrink.drink.data: 
+                if modifyDrink.description.data and modifyDrink.drink.data: 
+                        description = modifyDrink.description.data
+                        drink1.description = description
                         #see line 431 for inspriration
 
                 db.session.commit()
