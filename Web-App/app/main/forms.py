@@ -57,8 +57,8 @@ class CustomizeForm(FlaskForm):
     fav = BooleanField(u'Favorite')
     inst = TextAreaField(u'Special Instructions')
 
-    adding = SelectField("Add To Order", choices=[(1,1),(2,2),(3,3)]) 
-    submit = SubmitField('Submit Order')
+    adding = SelectField(choices=[(1,1),(2,2),(3,3)]) 
+    submit = SubmitField('Add To Order')
 
     def __init__(self, drinkI):
         super(CustomizeForm, self).__init__()
@@ -94,7 +94,7 @@ class OrderForm(FlaskForm):
     room = SelectField(u'Room Number:', coerce=int, validators=[DataRequired()])
 
     #room = IntegerField('Room Number:', validators=[InputRequired(), NumberRange(min=100, max=292, message='Please enter a valid room number')])
-    submit = SubmitField('Order')
+    submit = SubmitField('Place Order')
 
     def __init__(self):
         super(OrderForm, self).__init__()
