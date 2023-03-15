@@ -101,7 +101,7 @@ class Caf(db.Model):
             return '<Caf {}>'.format(self.caf)
 
 class DrinksToCaf(db.Model):
-    __tablename__ = 'drinksToCaf'
+    __tablename__ = 'drinksToCaffeine'
     id = db.Column(db.Integer, primary_key = True)
     drink = db.Column(db.String(50), index = True)
     drinkId = db.Column(db.Integer, index = True)

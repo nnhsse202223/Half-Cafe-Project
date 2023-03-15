@@ -474,8 +474,10 @@ def a_modifyDrink():
                 if modifyDrink.description.data and modifyDrink.drink.data: 
                         description = modifyDrink.description.data
                         drink1.description = description
-                        #see line 431 for inspriration
-
+                if modifyDrink.price.data and modifyDrink.drink.data:
+                        price = modifyDrink.price.data
+                        drink1.price = description
+                
                 db.session.commit()
                 return redirect(url_for('main.a_modifyDrink'))
 
