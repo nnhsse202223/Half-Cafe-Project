@@ -39,6 +39,9 @@ def justOrdered(orderId):
         myDrink = order.drink
         return render_template("justOrdered.html", title='Your Order', orderId=orderId, myDrink=myDrink)
 
+@bp.route('/cancelOrderBarista', methods=['GET'])
+def cancelOrderBarista():
+        return render_template("cancelOrderBarista.html", title='Cancel This Order')
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
@@ -306,10 +309,8 @@ def barista():
         print(order_list)
         if request.method == 'POST':
                 print("posting")
-                if(request.form.get("deleted_order") == "cancel"):
-                        print("hello")
-                        deleted_order_id = request.form.get("deleted_order")
-                        deleted_order = Order.query.get(deleted_order_id)
+                if():
+                        sdf
                 else:
                         completed_order_id = request.form.get("complete_order")
                         completed_order = Order.query.get(completed_order_id)

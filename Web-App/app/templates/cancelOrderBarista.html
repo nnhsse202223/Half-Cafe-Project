@@ -153,22 +153,7 @@
         </nav>
         {% endblock %}
         <div>
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th scope="col">Room Number</th>
-              <th scope="col">Teacher</th>
-              <th scope="col">Drinks</th>
-              <th scope="col">Temp</th>
-              <th scope="col">Decaf</th>
-              <th scope="col">Flavors</th>
-              <th scope="col">Special Instructions</th>
-              <th scope="col">Timestamp</th>
-              <th scope="col">Cancel Order</th>
-              <th scope="col">Finished</th>
-            </tr>
-          </thead>
-          <tbody>
+
           {% for o in order_list %}
           <!--Order list 
             o[0] - Username (ex. teacher)
@@ -178,38 +163,11 @@
             o[3] - Timestamp
             o[4] - Order number (?)
           -->
-            <tr>
-              <th scope="col">{{ o[2] }}</th> 
-              <th scope="col">{{ o[0] }}</th>
-              <th scope="col">
-                {% for d in o[1] %}
-                    <p> {{ d[0] }} </p>
-                {% endfor %}</th>
-              <th scope="col">
-                {% for d in o[1] %}
-                    <p> {{ d[1] }} </p>
-                {% endfor %}</th>
-              <th scope="col">
-                {% for d in o[1] %}
-                    {% if d[0] == True %}
-                        <p> Decaf </p>
-                    {% else %}
-                        <p> Regular </p>
-                    {% endif %}
-                {% endfor %}</th>
-              <th scope="col">
-                {% for d in o[1] %}
-                    <p> {{ d[3] }} </p>
-                {% endfor %}</th>
-              <th scope="col">
-                {% for d in o[1] %}
-                <p> {{ d[4] }}  </p>
-                {% endfor %}</th>
               <th scope="col"> <p> {{ o[3] }} </p> </th>
               <th scope="col"> <form action="" method="post" novalidate></form>
-              <button type="submit" id="id_{{o[4]}}" name="cancel_order" ><a href="{{ url_for('main.baristaCompleted')}}"> Cancel Order</a></button> </form> </th>
+              <button type="submit" id="id_{{o[4]}}" name="cancel_order" value="{{o[4]}}"><a href="{{ url_for('main.cancelOrderBarista')}}"> Cancel Order</a></button> </form> </th>
               <th scope="col"> <form action="" method="post" novalidate>
-              <button type="submit" id="id_{{o[4]}}" name="complete_order" value="{{o[4]}}">Complete Order</button> </form> </th>
+              <button type="submit" id="id_{{o[4]}}" name="complete_order" value="{{o[4]}}"><a href="{{ url_for('main.baristaCompleted')}}"> Complete Order</a></button> </form> </th>
             </tr>
             {% endfor %}
             </tbody>
@@ -220,27 +178,6 @@
     </body>
 
     <body>
-      <div class="wrapper">
-        <div class="notification_wrap">
-          <div class="notification_icon" id="clicks">
-            <button type="button" class="icon-button" onclick="Date()">
-              <span class="material-icons">notifications</span>
-              {% if new_order %}
-                <span class="icon-button__badge"></span>
-              {% endif %}
-            </button>
-          </div>
-          <div class="dropdown">
-            <div class="notify_item">
-              <div class="notify_info">
-                {% for o in order_reverse %}
-                  <p> room {{ o[2] }}, {{ o[0] }} just placed an order!</p>
-                {% endfor %}
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
+ 
     </body>
 {% endblock %}
