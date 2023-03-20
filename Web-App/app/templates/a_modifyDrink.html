@@ -8,6 +8,9 @@
     <p>{{ modifyDrinkForm.drink.label }} {{ modifyDrinkForm.drink }}</p>
     <p>{{ modifyDrinkForm.flavor.label }} {{ modifyDrinkForm.flavor(rows=4, multiple=True) }}</p> <!--this adds the weird drop down part-->
     <p>{{ modifyDrinkForm.temp.label }} {{ modifyDrinkForm.temp(rows=2, multiple=True) }}</p> 
+    <p>{{ modifyDrinkForm.caffeine.label }} {{ modifyDrinkForm.caffeine(rows=2, multiple=True) }}</p>
+    <p>{{ modifyDrinkForm.description }} {{ modifyDrinkForm.description(multiple=false) }}</p>  
+    <p>{{ modifyDrinkForm.price }} {{ modifyDrinkForm.price(multiple=false) }}</p>  
     <p>{{ modifyDrinkForm.submit }}</p><br>
     </div>
 </form>
