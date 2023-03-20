@@ -50,6 +50,10 @@ class TeacherRegistrationForm(FlaskForm):
         if user is not None:
             raise ValidationError('Please use a different email address.')
 
+class CancelOrderBarista(FlaskForm):
+    reason = TextAreaField(u'Cancellation Reason')
+    submit = SubmitField('Confirm Cancellation')
+
 class CustomizeForm(FlaskForm):
     temp = SelectField(u'Temperature', coerce=int)
     decaf = BooleanField(u'Decaf')

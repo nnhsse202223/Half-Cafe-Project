@@ -2,7 +2,7 @@ from operator import truediv
 from flask import render_template, flash, redirect, url_for, request
 from app import app
 from app import db
-from app.main.forms import RegistrationForm, TeacherRegistrationForm, LoginForm, CustomizeForm, OrderForm, FavoriteDrinksForm, BaristaForm, A_AddUserForm, A_DeleteUserForm, A_AddDrinkForm, A_DeleteDrinkForm, A_AddFlavorForm, A_DeleteFlavorForm, A_UserDashboardForm, A_ModifyDrinkForm, ResetPasswordRequestForm, ResetPasswordForm
+from app.main.forms import CancelOrderBarista, RegistrationForm, TeacherRegistrationForm, LoginForm, CustomizeForm, OrderForm, FavoriteDrinksForm, BaristaForm, A_AddUserForm, A_DeleteUserForm, A_AddDrinkForm, A_DeleteDrinkForm, A_AddFlavorForm, A_DeleteFlavorForm, A_UserDashboardForm, A_ModifyDrinkForm, ResetPasswordRequestForm, ResetPasswordForm
 from flask_login import current_user
 from flask_login import login_user
 from app import models
@@ -41,7 +41,10 @@ def justOrdered(orderId):
 
 @bp.route('/cancelOrderBarista', methods=['GET'])
 def cancelOrderBarista():
-        return render_template("cancelOrderBarista.html", title='Cancel This Order')
+        form = CancelOrderBarista()
+        if request.method == 'POST':
+                return render_template("cancelOrderBarista.html", title='Cancel This Order')
+        return render_template("cancelOrderBarista.html", title='Barista Page')
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():

@@ -122,6 +122,7 @@
     <body>
         
         <h1> NNHS Half Caf Barista</h1>
+        
         {% block navbar %}
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -153,6 +154,11 @@
         </nav>
         {% endblock %}
         <div>
+          <br>
+          <h2> You are trying to cancel an order... </p>
+          <h3> Please type in the text box why so we can send out an email to the customer to inform them of the cancellation. </p>
+
+
 
           {% for o in order_list %}
           <!--Order list 
@@ -165,11 +171,13 @@
           -->
               <th scope="col"> <p> {{ o[3] }} </p> </th>
               <th scope="col"> <form action="" method="post" novalidate></form>
-              <button type="submit" id="id_{{o[4]}}" name="cancel_order" value="{{o[4]}}"><a href="{{ url_for('main.cancelOrderBarista')}}"> Cancel Order</a></button> </form> </th>
-              <th scope="col"> <form action="" method="post" novalidate>
-              <button type="submit" id="id_{{o[4]}}" name="complete_order" value="{{o[4]}}"><a href="{{ url_for('main.baristaCompleted')}}"> Complete Order</a></button> </form> </th>
+              <button type="submit" id="id_{{o[4]}}" name="confirm_cancel_order" value="{{o[4]}}">Cancel Order</a></button> </form> </th>
             </tr>
             {% endfor %}
+            <br>
+            
+            <button type="submit"  name="confirm_cancel_order">Confirm Cancellation</a></button> </form> </th>
+            {{ form.reason }}
             </tbody>
         </table>
         </div>
