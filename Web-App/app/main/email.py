@@ -10,6 +10,12 @@ def order_email(name, order, subject, sender, recipients):
     Your order has been completed and you will be receiving it shortly. <br> Here is what you have ordered: " + str(order)
     mail.send(msg)
 
+def cancel_email(name, reason, subject, sender, recipients):
+    msg = Message(subject, sender = sender, recipients = recipients)
+    msg.body = "Hi" + name + "! This email is to inform you that your Half-Caf order has been cancelled. The reason is: " + reason + " We apologize for any inconvenience this may have caused."
+    msg.html = "Hi" + name + "! This email is to inform you that your Half-Caf order has been cancelled. <br> \
+    The reason is: " + reason + " <br> We apologize for any inconvenience this may have caused. "
+    mail.send(msg)
 
 def reg_email(user):
     msg = Message("Please activate new user", sender = 'nnhshalfcafapp@gmail.com', recipients = ['nnhshalfcafapp@gmail.com'])

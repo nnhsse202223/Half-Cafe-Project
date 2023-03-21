@@ -156,7 +156,7 @@
         <div>
           <br>
           <h2> You are trying to cancel an order... </p>
-          <h3> Please type in the text box why so we can send out an email to the customer to inform them of the cancellation. </p>
+          <h3> Please type in the text box why to send out an email to the customer to inform them of the cancellation. </p>
 
 
 
@@ -175,17 +175,16 @@
             </tr>
             {% endfor %}
             <br>
-            
-            <button type="submit"  name="confirm_cancel_order">Confirm Cancellation</a></button> </form> </th>
+            <h4>Type below</p>
             {{ form.reason }}
+            <br>
+            <br>
+            {{ form.submit }}            
+
             </tbody>
         </table>
         </div>
     
         
-    </body>
-
-    <body>
- 
     </body>
 {% endblock %}

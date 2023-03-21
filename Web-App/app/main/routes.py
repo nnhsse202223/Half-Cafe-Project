@@ -16,6 +16,22 @@ from app.main.email import send_password_reset_email
 import datetime ##hello
 from app.main.email import order_email, reg_email
 
+@bp.route('/cancelOrderBarista', methods=['GET', 'POST'])
+def cancelOrderBarista():
+        form = CancelOrderBarista()
+        reason = form.reason
+        if request.method == 'POST':
+                completed_order_id = request.form.get("complete_order")
+                completed_order = Order.query.get(completed_order_id)
+                completed_teacher_id = completed_order.teacher_id
+                completed_teacher = User.query.filter_by(id = completed_teacher_id).first()
+                completed_order.complete = True
+                order_email(completed_teacher.username, reason, 'Your Half Caf Order has been cancelled', sender=app.config['ADMINS'][0], recipients=[completed_teacher.email])
+
+                return render_template("barista.html", title='Cancel This Order', form=form)
+        return render_template("cancelOrderBarista.html", title='Barista Page', form=form)
+
+
 @login.user_loader
 def load_user(id):
         return User.query.get(int(id))
@@ -38,13 +54,6 @@ def justOrdered(orderId):
         order = Order.query.get(orderId)
         myDrink = order.drink
         return render_template("justOrdered.html", title='Your Order', orderId=orderId, myDrink=myDrink)
-
-@bp.route('/cancelOrderBarista', methods=['GET'])
-def cancelOrderBarista():
-        form = CancelOrderBarista()
-        if request.method == 'POST':
-                return render_template("cancelOrderBarista.html", title='Cancel This Order')
-        return render_template("cancelOrderBarista.html", title='Barista Page')
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
@@ -311,22 +320,19 @@ def barista():
                                 
         print(order_list)
         if request.method == 'POST':
-                print("posting")
-                if():
-                        sdf
-                else:
-                        completed_order_id = request.form.get("complete_order")
-                        completed_order = Order.query.get(completed_order_id)
-                        completed_order.complete = True
-                
-                        emailDrinkList  = []
-                        for i in completed_order.drink:
-                                emailDrinkList.append(i.menuItem)
 
-                        completed_teacher_id = completed_order.teacher_id
-                        completed_teacher = User.query.filter_by(id = completed_teacher_id).first()
+                completed_order_id = request.form.get("complete_order")
+                completed_order = Order.query.get(completed_order_id)
+                completed_order.complete = True
+                
+                emailDrinkList  = []
+                for i in completed_order.drink:
+                        emailDrinkList.append(i.menuItem)
+
+                completed_teacher_id = completed_order.teacher_id
+                completed_teacher = User.query.filter_by(id = completed_teacher_id).first()
                
-                        order_email(completed_teacher.username, emailDrinkList, 'order ready!!', sender=app.config['ADMINS'][0], recipients=[completed_teacher.email])
+                order_email(completed_teacher.username, emailDrinkList, 'order ready!!', sender=app.config['ADMINS'][0], recipients=[completed_teacher.email])
                 
                 db.session.commit()
                 return redirect(url_for('main.barista'))

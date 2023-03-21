@@ -5,6 +5,13 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField, Selec
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo
 from app.models import User, Flavor, MenuItem, Drink, Order, Temp, RoomNum, DrinksToFlavor
 
+class CancelOrderBarista(FlaskForm):
+    reason = TextAreaField(u'Cancellation Reason')
+    submit = SubmitField('Confirm Cancellation')
+
+    def __init__(self):
+        super(CancelOrderBarista, self).__init__()
+
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
@@ -49,10 +56,6 @@ class TeacherRegistrationForm(FlaskForm):
         user = User.query.filter_by(email=email.data).first()
         if user is not None:
             raise ValidationError('Please use a different email address.')
-
-class CancelOrderBarista(FlaskForm):
-    reason = TextAreaField(u'Cancellation Reason')
-    submit = SubmitField('Confirm Cancellation')
 
 class CustomizeForm(FlaskForm):
     temp = SelectField(u'Temperature', coerce=int)
