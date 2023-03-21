@@ -185,7 +185,7 @@ class A_ModifyDrinkForm(FlaskForm):
     submit = SubmitField('Modify Drink')
     flavor = SelectMultipleField('Flavors') #the varable for the drop down part for flavors
     temp = SelectMultipleField('Temperatures')
-    caffeine = SelectMultipleField('Decaf/Not Decaf')
+    caffeine = SelectMultipleField('Misc. Options')
     description = TextAreaField('Edit Description')
     price = TextAreaField('Edit Price')
 
