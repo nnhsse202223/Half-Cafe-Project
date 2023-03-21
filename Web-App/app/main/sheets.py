@@ -63,7 +63,7 @@ service.spreadsheets().values().update(
 values.append
 """
 
-worksheet_name = 'Sales North!'
+worksheet_name = 'Half Caf Orders'
 cell_range_insert = 'B2'
 values = (
     ('Col E', 'Col F', 'Col G', 'Col H'),
