@@ -169,16 +169,15 @@
             o[3] - Timestamp
             o[4] - Order number (?)
           -->
-              <th scope="col"> <p> {{ o[3] }} </p> </th>
-              <th scope="col"> <form action="" method="post" novalidate></form>
-              <button type="submit" id="id_{{o[4]}}" name="confirm_cancel_order" value="{{o[4]}}">Cancel Order</a></button> </form> </th>
-            </tr>
-            {% endfor %}
+          {% endfor %}
+          <form action="" method="post" novalidate>
+  
             <br>
             <h4>Type below</p>
             {{ form.reason }}
             <br>
             <br>
+            
             {{ form.submit }}            
 
             </tbody>

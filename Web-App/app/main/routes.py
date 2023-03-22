@@ -14,20 +14,25 @@ from app.main import bp
 from app import login
 from app.main.email import send_password_reset_email
 import datetime ##hello
-from app.main.email import order_email, reg_email
+from app.main.email import order_email, reg_email, cancel_email
 
 @bp.route('/cancelOrderBarista', methods=['GET', 'POST'])
 def cancelOrderBarista():
         form = CancelOrderBarista()
         reason = form.reason
         if request.method == 'POST':
-                completed_order_id = request.form.get("complete_order")
-                completed_order = Order.query.get(completed_order_id)
-                completed_teacher_id = completed_order.teacher_id
-                completed_teacher = User.query.filter_by(id = completed_teacher_id).first()
-                completed_order.complete = True
-                order_email(completed_teacher.username, reason, 'Your Half Caf Order has been cancelled', sender=app.config['ADMINS'][0], recipients=[completed_teacher.email])
+                #cancel_order_id = request.form.get("cancel_order")
+                #cancel_order = Order.query.get(cancel_order_id)
+                
+                #cancel_teacher_id = cancel_order.teacher_id
+                #cancel_teacher = User.query.filter_by(id = cancel_teacher_id).first()
+                
+                #cancel_order.complete = True
+                
+                cause = form.reason.data
+                cancel_email("Louisa", str(cause), 'Your Half Caf Order has been cancelled', sender=app.config['ADMINS'][0], recipients=["lzhang2@stu.naperville203.org"])
 
+                db.session.commit()
                 return render_template("barista.html", title='Cancel This Order', form=form)
         return render_template("cancelOrderBarista.html", title='Barista Page', form=form)
 
