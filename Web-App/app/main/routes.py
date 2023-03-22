@@ -466,7 +466,7 @@ def a_modifyDrink():
                 if modifyDrink.caffeine.data and modifyDrink.drink.data: #new code - adds caffeine customization to admin form
                         for c in DrinksToCaf.query.filter_by(drinkId = drink1.id):
                                 db.session.delete(c)
-                        for CafId in modifyDrink.caf.data:
+                        for CafId in modifyDrink.caffeine.data:
                                 c = Caf.query.get(CafId)
 
                                 drinkCaf = DrinksToCaf(drink=drink1.name, caf = c.caf, drinkId = drink1.id, cafId = c.id)
