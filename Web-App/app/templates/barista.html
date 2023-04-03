@@ -207,8 +207,10 @@
                 <p> {{ d[4] }}  </p>
                 {% endfor %}</th>
               <th scope="col"> <p> {{ o[3] }} </p> </th>
-              <th scope="col"> <form action="" method="post" novalidate></form>
-              <button type="submit" id="id_{{o[4]}}" name="cancel_order" value="{{o[4]}}"><a href="{{ url_for('main.cancelOrderBarista')}}"> Cancel Order</a></button> </form> </th>
+
+              <th scope="col"> <form action="" method="post" novalidate>
+                <!--<a href="{{ url_for('main.cancelOrderBarista')}}"> Cancel Order</a>-->
+              <button type="submit" id="id_{{o[4]}}" name="cancel_order" value="{{o[4]}}">Cancel Order</button> </form> </th>
               <th scope="col"> <form action="" method="post" novalidate>
               <button type="submit" id="id_{{o[4]}}" name="complete_order" value="{{o[4]}}">Complete Order</button> </form> </th>
             </tr>

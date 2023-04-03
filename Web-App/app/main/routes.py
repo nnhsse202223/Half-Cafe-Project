@@ -20,24 +20,27 @@ from app.main.email import order_email, reg_email, cancel_email
 def cancelOrderBarista():
         form = CancelOrderBarista()
         reason = form.reason
+
         orders = Order.query.all()
+        # In DB: teacher_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
         if request.method == 'POST':
                 cancel_order_id = request.form.get("cancel_order")
                 cancel_order = Order.query.get(cancel_order_id)
-
-                #cancel_order.complete = True
                 
+                #cancel_order.complete = True
+
                 cancel_teacher_id = cancel_order_id.teacher_id
                 cancel_teacher = User.query.filter_by(id = cancel_teacher_id).first()
-                
-                
+        
                 cause = reason.data
                 cancel_email(cancel_teacher.username, str(cause), 'Your Half Caf Order has been cancelled', sender=app.config['ADMINS'][0], recipients=[cancel_teacher.email])
 
                 db.session.commit()
                 return render_template("barista.html", title='Cancel This Order', form=form)
-        return render_template("cancelOrderBarista.html", title='Barista Page', form=form)
+        
+        return render_template('cancelOrderBarista.html', title='Barista', form=form)
+
 
 
 @login.user_loader
