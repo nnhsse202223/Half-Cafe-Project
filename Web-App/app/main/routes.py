@@ -145,9 +145,10 @@ def custDrink(drinkId):
         elif current_user.user_type == "Admin":
                 return redirect(url_for('main.a_addUser'))
 
-        form = CustomizeForm(drinkId)
         m = MenuItem.query.get(drinkId)
-#
+        form = CustomizeForm(drinkId)
+        #for f in DrinksToCaffeine.query.filter_by(drinkId = m):
+                #
         adding=form.adding.data
         if request.method == 'POST':
 
@@ -173,7 +174,7 @@ def custDrink(drinkId):
                         db.session.commit()
 
                 return redirect(url_for('main.myOrder', orderId=o.id))
-        return render_template('customize.html', title='Customize Drink', form=form, m=m)
+        return render_template('customize.html', title='Customize Drink', form=form, m=m, bool)
 
 #displays the order that the user requested to the user
 @bp.route('/myOrder/<orderId>', methods=['GET', 'POST'])
@@ -469,7 +470,7 @@ def a_modifyDrink():
                         for CafId in modifyDrink.caffeine.data:
                                 c = Caf.query.get(CafId)
 
-                                drinkCaf = DrinksToCaf(drink=drink1.name, caf = c.caf, drinkId = drink1.id, cafId = c.id)
+                                drinkCaf = DrinksToCaf(drink=drink1.name, caf = c.caf, drinkId = drink1.id, cafId = c.id) #WHERE DOES c.caf GO
                                 db.session.add(drinkCaf)
                 if modifyDrink.description.data and modifyDrink.drink.data: 
                         description = modifyDrink.description.data

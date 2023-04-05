@@ -59,7 +59,7 @@ class CustomizeForm(FlaskForm):
 
     adding = SelectField("Add To Order", choices=[(1,1),(2,2),(3,3)]) 
     submit = SubmitField('Submit Order')
-
+    
     def __init__(self, drinkI):
         super(CustomizeForm, self).__init__()
 
