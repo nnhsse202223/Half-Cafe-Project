@@ -16,6 +16,20 @@ from app.main.email import send_password_reset_email
 import datetime ##hello
 from app.main.email import order_email, reg_email, cancel_email
 
+@bp.route('/handleOrder',methods=['GET','POST'])
+def handleOrder():
+        form = HandleOrder()
+        if request.method == 'POST':
+                # have some flag in the form where the action is indicated
+                action = request.form.get("action")
+                if action == "cancel":
+                        pass
+                        #do some stuff to cancel the order
+                if action == "complete":
+                        pass
+                        #do some stuff to complete the order
+
+
 @bp.route('/cancelOrderBarista', methods=['GET', 'POST'])
 def cancelOrderBarista():
         form = CancelOrderBarista()
@@ -334,6 +348,7 @@ def barista():
 
                 completed_order_id = request.form.get("complete_order")
                 completed_order = Order.query.get(completed_order_id)
+                
                 completed_order.complete = True
                 
                 emailDrinkList  = []
