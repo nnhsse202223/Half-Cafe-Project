@@ -187,7 +187,7 @@ class A_ModifyDrinkForm(FlaskForm):
     temp = SelectMultipleField('Temperatures')
     caffeine = SelectMultipleField('Misc. Options')
     description = TextAreaField('Edit Description')
-    price = TextAreaField('Edit Price')
+    price = TextAreaField('Edit Price (Integers Only)')
 
     def __init__(self):
         super(A_ModifyDrinkForm, self).__init__()
