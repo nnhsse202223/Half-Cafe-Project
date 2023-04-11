@@ -3,7 +3,7 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField, Selec
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, InputRequired, NumberRange
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, IntegerField, SelectMultipleField, TextAreaField, widgets, RadioField, FieldList, FormField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo
-from app.models import User, Flavor, MenuItem, Drink, Order, Temp, RoomNum, DrinksToFlavor, Caf
+from app.models import User, Flavor, MenuItem, Drink, Order, Temp, RoomNum, DrinksToFlavor, Caf, DrinksToTemp
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
@@ -63,7 +63,7 @@ class CustomizeForm(FlaskForm):
     def __init__(self, drinkI):
         super(CustomizeForm, self).__init__()
 
-        self.temp.choices = [(t.id, t.temp) for t in Temp.query.order_by(Temp.id)]
+        self.temp.choices = [(t.id, t.temp) for t in DrinksToTemp.query.filter_by(drinkId = drinkI)]
         self.flavors.choices = [(f.flavorId, f.flavor) for f in DrinksToFlavor.query.filter_by(drinkId = drinkI)] #this is where i need to change the query
 
 

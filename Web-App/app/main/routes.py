@@ -148,9 +148,8 @@ def custDrink(drinkId):
         m = MenuItem.query.get(drinkId)
         form = CustomizeForm(drinkId)
         decaf = False
-        filter = (drinkId == m)
-        for f in DrinksToCaf.query.filter_by(filter): #Ask Schmit why its taking 1 positional arg, but was given 2
-                if(f.caf.data == 3):
+        for f in DrinksToCaf.query.filter_by(drinkId = drinkId): #Ask Schmit why its taking 1 positional arg, but was given 2
+                if(f.cafId == 3):
                       decaf = True              
         adding=form.adding.data
         if request.method == 'POST':
