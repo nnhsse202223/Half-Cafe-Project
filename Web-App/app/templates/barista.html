@@ -210,9 +210,9 @@
 
 
               <!-- Issue with method ='post', because there are two-->
-              <th scope="col"> <form action="" method="post" class = 'cancel' novalidate>
+              <th scope="col"> <form action="/cancelOrderBarista" method="post" class = 'cancel' novalidate>
               <button type="submit" id="id_{{o[4]}}" name="cancel_order" value="{{o[4]}}">Cancel Order</button> </form> </th>
-              <th scope="col"> <form action="" method="post" class='complete' novalidate>
+              <th scope="col"> <form action="/baristaCompleted" method="post" class='complete' novalidate>
               <button type="submit" id="id_{{o[4]}}" name="complete_order" value="{{o[4]}}">Complete Order</button> </form> </th>
             </tr>
             {% endfor %}

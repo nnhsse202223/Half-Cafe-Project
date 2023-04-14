@@ -11,6 +11,7 @@ def order_email(name, order, subject, sender, recipients):
     mail.send(msg)
 
 def cancel_email(name, reason, subject, sender, recipients):
+    print("reason: ",reason)
     msg = Message(subject, sender = sender, recipients = recipients)
     msg.body = "Hi " + name + "! This email is to inform you that your Half-Caf order has been cancelled. The reason is: " + reason + " We apologize for any inconvenience this may have caused."
     msg.html = "Hi " + name + "! This email is to inform you that your Half-Caf order has been cancelled. <br> \
