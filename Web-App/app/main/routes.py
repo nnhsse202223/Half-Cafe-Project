@@ -148,9 +148,12 @@ def custDrink(drinkId):
         m = MenuItem.query.get(drinkId)
         form = CustomizeForm(drinkId)
         decaf = False
+        sf = False
         for f in DrinksToCaf.query.filter_by(drinkId = drinkId): #Ask Schmit why its taking 1 positional arg, but was given 2
                 if(f.cafId == 3):
-                      decaf = True              
+                      decaf = True
+                elif(f.cafId == 2):
+                        sf = True               
         adding=form.adding.data
         if request.method == 'POST':
 
@@ -159,6 +162,7 @@ def custDrink(drinkId):
                         d = Drink(menuItem=m.name,
                           temp_id=form.temp.data,
                           decaf=form.decaf.data,
+                          sf=form.sf.data,
                           flavors=form.flavors.data,
                           order_id=current_user.current_order_id,
                           inst=form.inst.data)
@@ -176,7 +180,7 @@ def custDrink(drinkId):
                         db.session.commit()
 
                 return redirect(url_for('main.myOrder', orderId=o.id))
-        return render_template('customize.html', title='Customize Drink', form=form, m=m, decaf=decaf)
+        return render_template('customize.html', title='Customize Drink', form=form, m=m, decaf=decaf, sf=sf)
 
 #displays the order that the user requested to the user
 @bp.route('/myOrder/<orderId>', methods=['GET', 'POST'])

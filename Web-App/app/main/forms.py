@@ -53,6 +53,7 @@ class TeacherRegistrationForm(FlaskForm):
 class CustomizeForm(FlaskForm):
     temp = SelectField(u'Temperature', coerce=int)
     decaf = BooleanField(u'Decaf')
+    sf = BooleanField(u'Sugar Free')
     flavors = SelectField(u'Flavors', coerce=str)
     fav = BooleanField(u'Favorite')
     inst = TextAreaField(u'Special Instructions')
