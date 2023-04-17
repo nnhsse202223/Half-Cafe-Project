@@ -64,7 +64,7 @@ class CustomizeForm(FlaskForm):
     def __init__(self, drinkI):
         super(CustomizeForm, self).__init__()
 
-        self.temp.choices = [(t.id, t.temp) for t in DrinksToTemp.query.filter_by(drinkId = drinkI)]
+        self.temp.choices = [(t.tempId, t.temp) for t in DrinksToTemp.query.filter_by(drinkId = drinkI)]
         self.flavors.choices = [(f.flavorId, f.flavor) for f in DrinksToFlavor.query.filter_by(drinkId = drinkI)] #this is where i need to change the query
 
 

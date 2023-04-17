@@ -157,6 +157,8 @@ def custDrink(drinkId):
         adding=form.adding.data
         if request.method == 'POST':
 
+                
+                print("DEBUG", form.temp.data) #- what is that
                 value = range(int(adding))
                 for i in value:
                         d = Drink(menuItem=m.name,

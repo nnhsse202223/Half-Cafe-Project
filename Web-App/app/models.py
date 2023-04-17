@@ -119,6 +119,7 @@ class Drink(db.Model):
     menuItem = db.Column(db.String(50), index=True)
     temp_id = db.Column(db.Integer, db.ForeignKey('temp.id'), nullable=False)
     decaf = db.Column(db.Boolean, index=True, default=False)
+    sf = db.Column(db.Boolean, index=True, default=False)
     flavors = db.Column(db.String(50), index=True)
     order_id = db.Column(db.Integer, db.ForeignKey('order.id'), nullable=True)
     inst = db.Column(db.String(150), index=True)
