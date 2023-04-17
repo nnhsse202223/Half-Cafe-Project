@@ -1,7 +1,7 @@
 from __future__ import print_function
 
 import os.path
-from Google import Create_Service
+# from Google import Create_Service
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -9,12 +9,12 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
 # If modifying these scopes, delete the file token.json.
-CLIENT_SECRET_FILE = 'client_secret.json'
-API_NAME = 'sheets'
-API_VERSION = 'v4'
-SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
+# CLIENT_SECRET_FILE = 'client_secret.json'
+# API_NAME = 'sheets'
+# API_VERSION = 'v4'
+SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
 
-service = Create_Service(CLIENT_SECRET_FILE, API_NAME, API_VERSION, SCOPES)
+# service = Create_Service(CLIENT_SECRET_FILE, API_NAME, API_VERSION, SCOPES)
 
 # The ID and range of a sample spreadsheet.
 SAMPLE_SPREADSHEET_ID = '1iHO2E2TJbnGLL6bYG4MeK9QbpPHs5B2Lc6bVeAPJ4RM'
@@ -59,7 +59,8 @@ def main():
         print('Name, Major:')
         for row in values:
             # Print columns A and E, which correspond to indices 0 and 4.
-            print('%s, %s' % (row[0], row[4]))
+            if len(row) > 1:
+                print('%s, %s' % (row[0], row[1]))
     except HttpError as err:
         print(err)
 
@@ -67,20 +68,20 @@ def main():
 if __name__ == '__main__':
     main()
 
-worksheet_name = 'Half Caf Orders'
-cell_range_insert = 'B2'
-values = (
-    ('Col A', 'Col B', 'Col C', 'Col D'),
-    ('Apple', 'Orange', 'Watermelon', 'Banana')
-)
-value_range_body = {
-    'majorDimension': 'ROWS',
-    'values': values
-}
+# worksheet_name = 'Half Caf Orders'
+# cell_range_insert = 'B2'
+# values = (
+#     ('Col A', 'Col B', 'Col C', 'Col D'),
+#     ('Apple', 'Orange', 'Watermelon', 'Banana')
+# )
+# value_range_body = {
+#     'majorDimension': 'ROWS',
+#     'values': values
+# }
 
-service.spreadsheets().values().update(
-    spreadsheetId=spreadsheet_id,
-    valueInputOption='USER_ENTERED',
-    range=worksheet_name + cell_range_insert,
-    body=value_range_body
-).execute()
+# service.spreadsheets().values().update(
+#     spreadsheetId=spreadsheet_id,
+#     valueInputOption='USER_ENTERED',
+#     range=worksheet_name + cell_range_insert,
+#     body=value_range_body
+# ).execute()
