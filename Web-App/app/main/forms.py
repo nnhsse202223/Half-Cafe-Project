@@ -9,6 +9,10 @@ class CancelOrderBarista(FlaskForm):
     reason = TextAreaField(u'Cancellation Reason')
     submit = SubmitField('Confirm Cancellation')
 
+class CancelOrderBaristaSubmit(FlaskForm):
+    reason = TextAreaField(u'Cancellation Reason')
+    submit = SubmitField('Confirm Cancellation')
+
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
