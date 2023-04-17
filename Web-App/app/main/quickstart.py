@@ -12,7 +12,7 @@ from googleapiclient.errors import HttpError
 # CLIENT_SECRET_FILE = 'client_secret.json'
 # API_NAME = 'sheets'
 # API_VERSION = 'v4'
-SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
+SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 
 # service = Create_Service(CLIENT_SECRET_FILE, API_NAME, API_VERSION, SCOPES)
 
@@ -46,8 +46,14 @@ def main():
     try:
         service = build('sheets', 'v4', credentials=creds)
 
+        '%s:%s' % (row,row)
         # Call the Sheets API``
         sheet = service.spreadsheets()
+        sheet.values().update(spreadsheetId=SAMPLE_SPREADSHEET_ID,range="A4:I4",valueInputOption="USER_ENTERED",body={
+            "values":[
+                ["coffee","decaf"],
+            ]
+        }).execute()
         result = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,
                                     range=SAMPLE_RANGE_NAME).execute()
         values = result.get('values', [])
@@ -61,6 +67,7 @@ def main():
             # Print columns A and E, which correspond to indices 0 and 4.
             if len(row) > 1:
                 print('%s, %s' % (row[0], row[1]))
+    
     except HttpError as err:
         print(err)
 
