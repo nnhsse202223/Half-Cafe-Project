@@ -45,13 +45,13 @@ def main():
 
     try:
         service = build('sheets', 'v4', credentials=creds)
+        
 
-        '%s:%s' % (row,row)
         # Call the Sheets API``
         sheet = service.spreadsheets()
-        sheet.values().update(spreadsheetId=SAMPLE_SPREADSHEET_ID,range="A4:I4",valueInputOption="USER_ENTERED",body={
+        sheet.values().update(spreadsheetId=SAMPLE_SPREADSHEET_ID, range="A5:B5", valueInputOption="USER_ENTERED",body={
             "values":[
-                ["coffee","decaf"],
+                ["coffee", "latte"],
             ]
         }).execute()
         result = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,
@@ -62,11 +62,13 @@ def main():
             print('No data found.')
             return
 
-        print('Name, Major:')
+        print(' ')
         for row in values:
             # Print columns A and E, which correspond to indices 0 and 4.
             if len(row) > 1:
-                print('%s, %s' % (row[0], row[1]))
+                print('%s, %s, %s, %s, %s, %s, %s, %s, %s' % 
+                      (row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8]))
+
     
     except HttpError as err:
         print(err)
