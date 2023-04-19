@@ -1,5 +1,6 @@
 from __future__ import print_function
-
+from flask_login import current_user
+from app.models import User, Flavor, MenuItem, Drink, Order, Temp, RoomNum, DrinksToFlavor
 import os.path
 # from Google import Create_Service
 from google.auth.transport.requests import Request
@@ -20,7 +21,7 @@ SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 SAMPLE_SPREADSHEET_ID = '1iHO2E2TJbnGLL6bYG4MeK9QbpPHs5B2Lc6bVeAPJ4RM'
 SAMPLE_RANGE_NAME = 'Half Caf Orders'
 
-
+o = Order.query.get(current_user.current_order_id)
 def main():
     """Shows basic usage of the Sheets API.
     Prints values from a sample spreadsheet.
@@ -46,12 +47,12 @@ def main():
     try:
         service = build('sheets', 'v4', credentials=creds)
         
-
+         
         # Call the Sheets API``
         sheet = service.spreadsheets()
-        sheet.values().update(spreadsheetId=SAMPLE_SPREADSHEET_ID, range="A5:B5", valueInputOption="USER_ENTERED",body={
+        sheet.values().update(spreadsheetId=SAMPLE_SPREADSHEET_ID, range="A5:I5", valueInputOption="USER_ENTERED",body={
             "values":[
-                ["coffee", "latte"],
+                ["4/19/23", Order.query.get(o.tempId).temp],
             ]
         }).execute()
         result = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,
@@ -66,8 +67,8 @@ def main():
         for row in values:
             # Print columns A and E, which correspond to indices 0 and 4.
             if len(row) > 1:
-                print('%s, %s, %s, %s, %s, %s, %s, %s, %s' % 
-                      (row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8]))
+                print('%s, %s' % 
+                      (row[0], row[1]))
 
     
     except HttpError as err:
