@@ -2,7 +2,7 @@ from operator import truediv
 from flask import render_template, flash, redirect, url_for, request
 from app import app
 from app import db
-from app.main.forms import CancelOrderBaristaSubmit, CancelOrderBarista, RegistrationForm, TeacherRegistrationForm, LoginForm, CustomizeForm, OrderForm, FavoriteDrinksForm, BaristaForm, A_AddUserForm, A_DeleteUserForm, A_AddDrinkForm, A_DeleteDrinkForm, A_AddFlavorForm, A_DeleteFlavorForm, A_UserDashboardForm, A_ModifyDrinkForm, ResetPasswordRequestForm, ResetPasswordForm
+from app.main.forms import CancelOrderBarista, RegistrationForm, TeacherRegistrationForm, LoginForm, CustomizeForm, OrderForm, FavoriteDrinksForm, BaristaForm, A_AddUserForm, A_DeleteUserForm, A_AddDrinkForm, A_DeleteDrinkForm, A_AddFlavorForm, A_DeleteFlavorForm, A_UserDashboardForm, A_ModifyDrinkForm, ResetPasswordRequestForm, ResetPasswordForm
 from flask_login import current_user
 from flask_login import login_user
 from app import models
@@ -26,9 +26,9 @@ def cancelOrderBarista():
         
         orders = Order.query.all()
         # In DB: teacher_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-
+        return render_template('cancelOrderBarista.html', title='Barista', form=form)
+"""
         if request.method == 'POST':
-                print("hello!!!!")
                 cancel_order_id = request.form.get("cancel_order")
                 cancel_order = Order.query.get(cancel_order_id)
                 print(str(cause))
@@ -42,10 +42,9 @@ def cancelOrderBarista():
 
                 db.session.commit()
   
-                return render_template("cancelOrderBarista.html", title='Order Cancelled', form=form)
-        return render_template('barista.html', title='Barista', form=form)
+                return render_template("cancelOrderBarista.html", title='Order Cancelled', form=form) """
 
-@bp.route('/barista', methods=['GET', 'POST'])
+@bp.route('/barista', methods=['GET', 'POST', 'DELETE'])
 def barista():
         if current_user.is_anonymous or current_user.user_type != 'Barista':
                 return redirect(url_for('main.login'))
@@ -84,7 +83,7 @@ def barista():
                                         new = False
                                 
         print(order_list)
-        if request.method == 'POST':
+        if request.method == 'POST' and "complete_order" in request.form:
 
                 completed_order_id = request.form.get("complete_order")
                 completed_order = Order.query.get(completed_order_id)
@@ -98,10 +97,33 @@ def barista():
                 completed_teacher_id = completed_order.teacher_id
                 completed_teacher = User.query.filter_by(id = completed_teacher_id).first()
                
+                
                 order_email(completed_teacher.username, emailDrinkList, 'order ready!!', sender=app.config['ADMINS'][0], recipients=[completed_teacher.email])
                 
                 db.session.commit()
                 return redirect(url_for('main.barista'))
+        if request.method == 'POST' and 'cancel_order' in request.form:
+                form = CancelOrderBarista()
+                reason = form.reason
+                cause = reason.data
+
+
+                form = BaristaForm()
+                cancel_order_id = request.form.get("cancel_order")
+                cancel_order = Order.query.get(cancel_order_id)
+                
+
+                cancel_teacher_id = cancel_order.teacher_id
+                cancel_teacher = User.query.filter_by(id = cancel_teacher_id).first()
+        
+                form = CancelOrderBarista()
+                cancel_email(cancel_teacher.username, str(cause), 'Your Half Caf Order has been cancelled', sender=app.config['ADMINS'][0], recipients=[cancel_teacher.email])
+                
+                cancel_order.complete = True
+
+                db.session.commit()
+                return render_template("cancelOrderBarista.html", title='Order Cancelled', form=form)
+                
         return render_template('barista.html', title='Barista', order_list=order_list, form=form, new_order=new, order_reverse = order_reverse, order_time = store.acc_order)
 
  
