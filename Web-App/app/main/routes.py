@@ -107,17 +107,19 @@ def barista():
                 reason = form.reason
                 cause = reason.data
 
-
                 form = BaristaForm()
                 cancel_order_id = request.form.get("cancel_order")
                 cancel_order = Order.query.get(cancel_order_id)
                 
+                emailDrinkList  = []
+                for i in cancel_order.drink:
+                        emailDrinkList.append(i.menuItem)
 
                 cancel_teacher_id = cancel_order.teacher_id
                 cancel_teacher = User.query.filter_by(id = cancel_teacher_id).first()
         
                 form = CancelOrderBarista()
-                cancel_email(cancel_teacher.username, str(cause), 'Your Half Caf Order has been cancelled', sender=app.config['ADMINS'][0], recipients=[cancel_teacher.email])
+                cancel_email(cancel_teacher.username, emailDrinkList, str(cause), 'Your Half Caf Order has been cancelled', sender=app.config['ADMINS'][0], recipients=[cancel_teacher.email])
                 
                 cancel_order.complete = True
 
