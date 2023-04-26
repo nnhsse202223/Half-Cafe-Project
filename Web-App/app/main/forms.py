@@ -7,7 +7,7 @@ from app.models import User, Flavor, MenuItem, Drink, Order, Temp, RoomNum, Drin
 
 class CancelOrderBarista(FlaskForm):
     reason = TextAreaField('Cancellation Reason')
-    submitting = SubmitField('Confirm Cancellation')
+    submitting = SubmitField('CANCELConfirm Cancellation')
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
@@ -105,8 +105,6 @@ class OrderForm(FlaskForm):
         self.room.choices = [(r.id, r.num) for r in RoomNum.query.order_by(RoomNum.id)]
 
 class BaristaForm(FlaskForm):
-    reason = TextAreaField('Cancellation Reason')
-    submitting = SubmitField('Confirm Cancellation')
     clear_completed_orders = SubmitField(u'Complete Orders')
 
     
