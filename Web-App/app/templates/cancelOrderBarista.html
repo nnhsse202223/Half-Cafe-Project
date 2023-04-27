@@ -170,14 +170,15 @@
             o[4] - Order number (?)
           -->
           {% endfor %}
-          <form action="" method="post" novalidate>
+  
   
             <br>
             <h4>Type below</p>
-              {{ form.reason }}
+            <textarea name="text_area"></textarea>
+            <form method = "get" name = novalidate> {{ form.reason }} </form>
             <br>
             <br>
-              {{ form.submitting }} 
+            <form method="post"  novalidate> {{ form.submitting }}  </form>
 
             </tbody>
         </table>

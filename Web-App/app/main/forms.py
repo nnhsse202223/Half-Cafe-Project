@@ -6,7 +6,6 @@ from wtforms.validators import DataRequired, ValidationError, Email, EqualTo
 from app.models import User, Flavor, MenuItem, Drink, Order, Temp, RoomNum, DrinksToFlavor
 
 class CancelOrderBarista(FlaskForm):
-    reason = TextAreaField('Cancellation Reason')
     submitting = SubmitField('CANCELConfirm Cancellation')
 
 class LoginForm(FlaskForm):

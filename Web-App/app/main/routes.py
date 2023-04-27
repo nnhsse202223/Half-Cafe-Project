@@ -20,14 +20,8 @@ from app.main.email import order_email, reg_email, cancel_email
 
 @bp.route('/cancelOrderBarista', methods=['GET', 'POST'])
 def cancelOrderBarista():
-        return render_template('cancelOrderBarista.html', title='cancelOrderPage', form=form)
-
-def reason():
         form = CancelOrderBarista()
-        global x 
-        reason = form.reason
-        x = reason.data
-        return x
+        return render_template('cancelOrderBarista.html', title='cancelOrderPage', form=form)
 
 
 @bp.route('/barista', methods=['GET', 'POST', 'DELETE'])
@@ -87,7 +81,7 @@ def barista():
                 db.session.commit()
                 return redirect(url_for('main.barista'))
         
-        if request.method == 'POST' and 'cancel_order' in request.form:
+        elif request.method == 'POST' and 'cancel_order' in request.form:
                 orders = Order.query.all()
 
                 cancel_order_id = request.form.get("cancel_order")
@@ -101,7 +95,10 @@ def barista():
                 cancel_teacher = User.query.filter_by(id = cancel_teacher_id).first()
         
                 form = CancelOrderBarista()
-                cancel_email(cancel_teacher.username, emailDrinkList, str(reason()), 'Your Half Caf Order has been cancelled', sender=app.config['ADMINS'][0], recipients=[cancel_teacher.email])
+                if request.method == 'POST':
+                        reason = request.form.get("text_area")
+                        
+                        cancel_email(cancel_teacher.username, emailDrinkList, reason, 'Your Half Caf Order has been cancelled', sender=app.config['ADMINS'][0], recipients=[cancel_teacher.email])
                 
                 cancel_order.complete = True
 
@@ -114,7 +111,7 @@ def barista():
 @login.user_loader
 def load_user(id):
         return User.query.get(int(id))
-
+ 
 @bp.route('/', methods=['GET', 'POST'])
 @bp.route('/home', methods=['GET', 'POST'])
 def home():
