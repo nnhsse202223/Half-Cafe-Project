@@ -158,7 +158,6 @@ def custDrink(drinkId):
         if request.method == 'POST':
 
                 
-                print("DEBUG", form.temp.data) #- what is that
                 value = range(int(adding))
                 for i in value:
                         d = Drink(menuItem=m.name,
@@ -299,7 +298,7 @@ def barista():
                                 for d in o.drink: #creates drink variable for the order based off inputs from customer
                                         temp = Temp.query.get(d.temp_id)
                                         flavorString = Flavor.query.get(d.flavors)
-                                        drink = (d.menuItem, temp.temp, d.decaf, str(flavorString)[8:-1], d.inst) #Drink variable 
+                                        drink = (d.menuItem, temp.temp, d.decaf, d.sf, str(flavorString)[8:-1], d.inst) #Drink variable 
                                         drink_list.append(drink)
 
                                 order = (teacher.username, drink_list, roomnum.num, o.timestamp.strftime("%Y-%m-%d at %H:%M"), o.id, o.read)
