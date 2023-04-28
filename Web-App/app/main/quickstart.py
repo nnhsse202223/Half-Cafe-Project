@@ -1,6 +1,4 @@
 from __future__ import print_function
-from flask_login import current_user
-from app.models import User, Flavor, MenuItem, Drink, Order, Temp, RoomNum, DrinksToFlavor
 import os.path
 # from Google import Create_Service
 from google.auth.transport.requests import Request
@@ -21,7 +19,6 @@ SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 SAMPLE_SPREADSHEET_ID = '1iHO2E2TJbnGLL6bYG4MeK9QbpPHs5B2Lc6bVeAPJ4RM'
 SAMPLE_RANGE_NAME = 'Half Caf Orders'
 
-o = Order.query.get(current_user.current_order_id)
 def main():
     """Shows basic usage of the Sheets API.
     Prints values from a sample spreadsheet.
@@ -52,7 +49,7 @@ def main():
         sheet = service.spreadsheets()
         sheet.values().update(spreadsheetId=SAMPLE_SPREADSHEET_ID, range="A5:I5", valueInputOption="USER_ENTERED",body={
             "values":[
-                ["4/19/23", Order.query.get(o.tempId).temp],
+                ["4/19/23", "latte"],
             ]
         }).execute()
         result = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,
