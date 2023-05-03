@@ -174,11 +174,11 @@
   
             <br>
             <h4>Type below</p>
-            <textarea name="text_area"></textarea>
-            <form method = "get" name = novalidate> {{ form.reason }} </form>
+            
+            <form novalidate> {{ form.reason }} </form>
             <br>
             <br>
-            <form method="post"  novalidate> {{ form.submitting }}  </form>
+            <form action="" method="post" novalidate> <p>{{ form.submitting }}  </p></form>
 
             </tbody>
         </table>

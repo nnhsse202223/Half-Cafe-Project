@@ -95,14 +95,16 @@ def barista():
                 cancel_teacher = User.query.filter_by(id = cancel_teacher_id).first()
         
                 form = CancelOrderBarista()
-                if request.method == 'POST':
-                        reason = request.form.get("text_area")
-                        
-                        cancel_email(cancel_teacher.username, emailDrinkList, reason, 'Your Half Caf Order has been cancelled', sender=app.config['ADMINS'][0], recipients=[cancel_teacher.email])
-                
-                cancel_order.complete = True
 
-                db.session.commit()
+                if request.method == 'POST':
+
+                        cause = form.reason.data
+
+                        cancel_email(cancel_teacher.username, emailDrinkList, cause, 'Your Half Caf Order has been cancelled', sender=app.config['ADMINS'][0], recipients=[cancel_teacher.email])
+                
+                        cancel_order.complete = True
+
+                        db.session.commit()
                 return render_template("cancelOrderBarista.html", title='Order Cancelled', form=form)
                 
         return render_template('barista.html', title='Barista', order_list=order_list, form=form, new_order=new, order_reverse = order_reverse, order_time = store.acc_order)

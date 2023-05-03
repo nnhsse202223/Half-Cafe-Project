@@ -2,11 +2,12 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, SelectMultipleField, TextAreaField, widgets, RadioField, FieldList, FormField, IntegerField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, InputRequired, NumberRange
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, IntegerField, SelectMultipleField, TextAreaField, widgets, RadioField, FieldList, FormField
-from wtforms.validators import DataRequired, ValidationError, Email, EqualTo
+from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, Length
 from app.models import User, Flavor, MenuItem, Drink, Order, Temp, RoomNum, DrinksToFlavor
 
 class CancelOrderBarista(FlaskForm):
-    submitting = SubmitField('CANCELConfirm Cancellation')
+    reason = TextAreaField('Reason')
+    submitting = SubmitField('Confirm Cancellation')
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
