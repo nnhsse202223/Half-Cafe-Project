@@ -178,8 +178,8 @@
             <form novalidate> {{ form.reason }} </form>
             <br>
             <br>
-            <form action="" method="post" novalidate> <p>{{ form.submitting }}  </p></form>
-
+            <input type="text" value="{{order_id}}" readonly>
+            <form action="/cancelOrderBarista" method="post" novalidate> <p>{{ form.submitting }}  </p></form>
             </tbody>
         </table>
         </div>

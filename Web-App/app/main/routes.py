@@ -21,7 +21,52 @@ from app.main.email import order_email, reg_email, cancel_email
 @bp.route('/cancelOrderBarista', methods=['GET', 'POST'])
 def cancelOrderBarista():
         form = CancelOrderBarista()
+
+        orders = Order.query.all()
+        order_list = []
+        order_reverse = []
+        order = ()
+        drink_list = []
+        drink = ()
+
+        for o in orders:
+                drink_list = []
+                if o.roomnum_id != None:
+                        if not o.complete:
+                                teacher = User.query.get(o.teacher_id)
+                                roomnum = RoomNum.query.get(o.roomnum_id)
+                                for d in o.drink:
+                                        temp = Temp.query.get(d.temp_id)
+                                        flavorString = Flavor.query.get(d.flavors)
+                                        drink = (d.menuItem, temp.temp, d.decaf, str(flavorString)[8:-1], d.inst) #added the inst thing
+                                        drink_list.append(drink)
+
+                                order = (teacher.username, drink_list, roomnum.num, o.timestamp.strftime("%Y-%m-%d at %H:%M"), o.id, o.read)
+                                order_list.append(order)
+                                order_reverse.insert(0, order)
+        
+        orders = Order.query.all()
+
+        if request.method == 'POST':
+                cancel_order_id = request.form.get("cancel_order")
+                cancel_order = Order.query.get(cancel_order_id)
+                
+                emailDrinkList  = []
+                for i in cancel_order.drink:
+                        emailDrinkList.append(i.menuItem)
+
+                cancel_teacher_id = cancel_order.teacher_id
+                cancel_teacher = User.query.filter_by(id = cancel_teacher_id).first()
+     
+                cause = form.reason.data
+
+                cancel_email(cancel_teacher.username, emailDrinkList, cause, 'Your Half Caf Order has been cancelled', sender=app.config['ADMINS'][0], recipients=[cancel_teacher.email])
+                
+                cancel_order.complete = True
+
+                db.session.commit()
         return render_template('cancelOrderBarista.html', title='cancelOrderPage', form=form)
+
 
 
 @bp.route('/barista', methods=['GET', 'POST', 'DELETE'])
@@ -63,7 +108,6 @@ def barista():
                                         new = False
                                 
         if request.method == 'POST' and "complete_order" in request.form:
-
                 completed_order_id = request.form.get("complete_order")
                 completed_order = Order.query.get(completed_order_id)
                 
@@ -82,30 +126,9 @@ def barista():
                 return redirect(url_for('main.barista'))
         
         elif request.method == 'POST' and 'cancel_order' in request.form:
-                orders = Order.query.all()
-
-                cancel_order_id = request.form.get("cancel_order")
-                cancel_order = Order.query.get(cancel_order_id)
-                
-                emailDrinkList  = []
-                for i in cancel_order.drink:
-                        emailDrinkList.append(i.menuItem)
-
-                cancel_teacher_id = cancel_order.teacher_id
-                cancel_teacher = User.query.filter_by(id = cancel_teacher_id).first()
-        
                 form = CancelOrderBarista()
-
-                if request.method == 'POST':
-
-                        cause = form.reason.data
-
-                        cancel_email(cancel_teacher.username, emailDrinkList, cause, 'Your Half Caf Order has been cancelled', sender=app.config['ADMINS'][0], recipients=[cancel_teacher.email])
+                return render_template("cancelOrderBarista.html", title='Order Cancelled', form=form,order_id=request.form.get("cancel_order"))
                 
-                        cancel_order.complete = True
-
-                        db.session.commit()
-                return render_template("cancelOrderBarista.html", title='Order Cancelled', form=form)
                 
         return render_template('barista.html', title='Barista', order_list=order_list, form=form, new_order=new, order_reverse = order_reverse, order_time = store.acc_order)
 
