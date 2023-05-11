@@ -189,6 +189,7 @@ class A_ModifyDrinkForm(FlaskForm):
     caffeine = SelectMultipleField('Misc. Options')
     description = TextAreaField('Edit Description')
     price = TextAreaField('Edit Price (Integers Only)')
+    #popular = BooleanField('Popular Drink')
 
     def __init__(self):
         super(A_ModifyDrinkForm, self).__init__()
@@ -196,6 +197,8 @@ class A_ModifyDrinkForm(FlaskForm):
         self.flavor.choices = [(i.id, i.name) for i in Flavor.query.order_by(Flavor.id)]
         self.temp.choices = [(i.id, i.temp) for i in Temp.query.order_by(Temp.id)] #new code - see the "a_modifyDrink" method in routes ('i.temp' is the same as 'i.name' in flavor)
         self.caffeine.choices = [(i.id, i.caf) for i in Caf.query.order_by(Caf.id)]
+        #self.popular.process_data(self.drink.data)
+        
 
 class A_DeleteDrinkForm(FlaskForm):
     drink = SelectField('Drink', coerce=str)
