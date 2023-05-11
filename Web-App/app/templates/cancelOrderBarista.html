@@ -174,12 +174,9 @@
   
             <br>
             <h4>Type below</p>
-            
-            <form novalidate> {{ form.reason }} </form>
-            <br>
-            <br>
-            <input type="text" value="{{order_id}}" readonly>
-            <form action="/cancelOrderBarista" method="post" novalidate> <p>{{ form.submitting }}  </p></form>
+     
+             <!-- fix styling/hide element-->
+            <form action="/cancelOrderBarista" method="post" novalidate>{{ form.reason }}<br><input type="text" value="{{order_id}}" name="order_id" style="display:none" readonly><p>{{ form.submitting }}  </p></form>
             </tbody>
         </table>
         </div>

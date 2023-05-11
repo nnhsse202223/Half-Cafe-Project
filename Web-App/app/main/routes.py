@@ -48,7 +48,7 @@ def cancelOrderBarista():
         orders = Order.query.all()
 
         if request.method == 'POST':
-                cancel_order_id = request.form.get("cancel_order")
+                cancel_order_id = request.form.get("order_id")
                 cancel_order = Order.query.get(cancel_order_id)
                 
                 emailDrinkList  = []
@@ -65,7 +65,7 @@ def cancelOrderBarista():
                 cancel_order.complete = True
 
                 db.session.commit()
-        return render_template('cancelOrderBarista.html', title='cancelOrderPage', form=form)
+        return redirect(url_for('main.barista'))
 
 
 
