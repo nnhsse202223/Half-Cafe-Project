@@ -93,6 +93,21 @@ class DrinksToTemp(db.Model):
     temp = db.Column(db.String(50), index=True)
     tempId = db.Column(db.Integer, db.ForeignKey('temp.id'), index=True)
 
+class Caf(db.Model):
+    __tablename__='caf'
+    id = db.Column(db.Integer, primary_key=True)
+    caf = db.Column(db.String(20), index=True)
+    def __repr__(self):
+            return '<Caf {}>'.format(self.caf)
+
+class DrinksToCaf(db.Model):
+    __tablename__ = 'drinksToCaffeine'
+    id = db.Column(db.Integer, primary_key = True)
+    drink = db.Column(db.String(50), index = True)
+    drinkId = db.Column(db.Integer, index = True)
+    caf = db.Column(db.String(50), index=True)
+    cafId = db.Column(db.Integer, db.ForeignKey('caf.id'), index=True)
+
 class RoomNum(db.Model):
     __tablename__= 'roomnum'
     id = db.Column(db.Integer, primary_key=True)
@@ -104,6 +119,7 @@ class Drink(db.Model):
     menuItem = db.Column(db.String(50), index=True)
     temp_id = db.Column(db.Integer, db.ForeignKey('temp.id'), nullable=False)
     decaf = db.Column(db.Boolean, index=True, default=False)
+    sf = db.Column(db.Boolean, index=True, default=False)
     flavors = db.Column(db.String(50), index=True)
     order_id = db.Column(db.Integer, db.ForeignKey('order.id'), nullable=True)
     inst = db.Column(db.String(150), index=True)
