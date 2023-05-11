@@ -190,6 +190,7 @@ class A_ModifyDrinkForm(FlaskForm):
     description = TextAreaField('Edit Description')
     price = TextAreaField('Edit Price (Integers Only)')
     #popular = BooleanField('Popular Drink')
+    
 
     def __init__(self):
         super(A_ModifyDrinkForm, self).__init__()
