@@ -6,6 +6,10 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
+from flask_login import current_user
+import app
+# from app.models import Order, Temp
+
 
 # If modifying these scopes, delete the file token.json.
 # CLIENT_SECRET_FILE = 'client_secret.json'
@@ -40,6 +44,8 @@ def main():
         # Save the credentials for the next run
         with open('token.json', 'w') as token:
             token.write(creds.to_json())
+    
+    o = Order.query.get(current_user.current_order_id)
 
     try:
         service = build('sheets', 'v4', credentials=creds)
@@ -47,9 +53,9 @@ def main():
          
         # Call the Sheets API``
         sheet = service.spreadsheets()
-        sheet.values().update(spreadsheetId=SAMPLE_SPREADSHEET_ID, range="A5:I5", valueInputOption="USER_ENTERED",body={
+        sheet.values().update(spreadsheetId=SAMPLE_SPREADSHEET_ID, range="A5:B5", valueInputOption="USER_ENTERED",body={
             "values":[
-                ["4/19/23", "latte"],
+                ["4/19/23", o.temp],
             ]
         }).execute()
         result = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,
