@@ -67,72 +67,6 @@ def cancelOrderBarista():
                 db.session.commit()
         return redirect(url_for('main.barista'))
 
-
-
-@bp.route('/barista', methods=['GET', 'POST', 'DELETE'])
-def barista():
-        if current_user.is_anonymous or current_user.user_type != 'Barista':
-                return redirect(url_for('main.login'))
-
-        form = BaristaForm()
-        store = HalfCaf.query.get(1)
-        orders = Order.query.all()
-        order_list = []
-        order_reverse = []
-        order = ()
-        drink_list = []
-        drink = ()
-        new = False
-
-        for o in orders:
-                drink_list = []
-                if o.roomnum_id != None:
-                        if not o.complete:
-                                teacher = User.query.get(o.teacher_id)
-                                roomnum = RoomNum.query.get(o.roomnum_id)
-                                for d in o.drink:
-                                        temp = Temp.query.get(d.temp_id)
-                                        flavorString = Flavor.query.get(d.flavors)
-                                        drink = (d.menuItem, temp.temp, d.decaf, str(flavorString)[8:-1], d.inst) #added the inst thing
-                                        drink_list.append(drink)
-
-                                order = (teacher.username, drink_list, roomnum.num, o.timestamp.strftime("%Y-%m-%d at %H:%M"), o.id, o.read)
-                                order_list.append(order)
-                                order_reverse.insert(0, order)
-                                
-                                if o.timestamp >= o.read:
-                                        new = True
-                                        o.read = datetime.datetime.now()
-                                        db.session.commit()
-                                else:
-                                        new = False
-                                
-        if request.method == 'POST' and "complete_order" in request.form:
-                completed_order_id = request.form.get("complete_order")
-                completed_order = Order.query.get(completed_order_id)
-                
-                completed_order.complete = True
-                
-                emailDrinkList  = []
-                for i in completed_order.drink:
-                        emailDrinkList.append(i.menuItem)
-
-                completed_teacher_id = completed_order.teacher_id
-                completed_teacher = User.query.filter_by(id = completed_teacher_id).first()
-               
-                order_email(completed_teacher.username, emailDrinkList, 'order ready!!', sender=app.config['ADMINS'][0], recipients=[completed_teacher.email])
-                
-                db.session.commit()
-                return redirect(url_for('main.barista'))
-        
-        elif request.method == 'POST' and 'cancel_order' in request.form:
-                form = CancelOrderBarista()
-                return render_template("cancelOrderBarista.html", title='Order Cancelled', form=form,order_id=request.form.get("cancel_order"))
-                
-                
-        return render_template('barista.html', title='Barista', order_list=order_list, form=form, new_order=new, order_reverse = order_reverse, order_time = store.acc_order)
-
- 
 @login.user_loader
 def load_user(id):
         return User.query.get(int(id))
@@ -429,10 +363,10 @@ def barista():
                                 else:
                                         new = False
                                 
-        if request.method == 'POST':
-                
+        if request.method == 'POST' and "complete_order" in request.form:
                 completed_order_id = request.form.get("complete_order")
                 completed_order = Order.query.get(completed_order_id)
+                
                 completed_order.complete = True
                 
                 emailDrinkList  = []
@@ -446,10 +380,15 @@ def barista():
                 
                 db.session.commit()
                 return redirect(url_for('main.barista'))
-
-
+        
+        elif request.method == 'POST' and 'cancel_order' in request.form:
+                form = CancelOrderBarista()
+                return render_template("cancelOrderBarista.html", title='Order Cancelled', form=form,order_id=request.form.get("cancel_order"))
+                
+                
         return render_template('barista.html', title='Barista', order_list=order_list, form=form, new_order=new, order_reverse = order_reverse, order_time = store.acc_order)
 
+ 
 
 @bp.route('/baristaCompleted', methods=['GET', 'POST'])
 def baristaCompleted():
