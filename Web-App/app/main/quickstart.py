@@ -45,8 +45,6 @@ def main():
         with open('token.json', 'w') as token:
             token.write(creds.to_json())
     
-    o = Order.query.get(current_user.current_order_id)
-
     try:
         service = build('sheets', 'v4', credentials=creds)
         
@@ -55,7 +53,7 @@ def main():
         sheet = service.spreadsheets()
         sheet.values().update(spreadsheetId=SAMPLE_SPREADSHEET_ID, range="A5:B5", valueInputOption="USER_ENTERED",body={
             "values":[
-                ["4/19/23", o.temp],
+                ["4/19/23", "latte"],
             ]
         }).execute()
         result = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,
@@ -80,21 +78,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-# worksheet_name = 'Half Caf Orders'
-# cell_range_insert = 'B2'
-# values = (
-#     ('Col A', 'Col B', 'Col C', 'Col D'),
-#     ('Apple', 'Orange', 'Watermelon', 'Banana')
-# )
-# value_range_body = {
-#     'majorDimension': 'ROWS',
-#     'values': values
-# }
-
-# service.spreadsheets().values().update(
-#     spreadsheetId=spreadsheet_id,
-#     valueInputOption='USER_ENTERED',
-#     range=worksheet_name + cell_range_insert,
-#     body=value_range_body
-# ).execute()
