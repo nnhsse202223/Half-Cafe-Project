@@ -227,13 +227,13 @@ INSERT INTO `drinksToFlavor` VALUES
 UNLOCK TABLES;
 
 --
--- Table structure for table `drinkstocaffeine`
+-- Table structure for table `drinksToCaffeine`
 --
 
-DROP TABLE IF EXISTS `drinkstocaffeine`;
+DROP TABLE IF EXISTS `drinksToCaffeine`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `drinkstocaffeine` (
+CREATE TABLE `drinksToCaffeine` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `drink` varchar(50) DEFAULT NULL,
   `drinkId` int(11) DEFAULT NULL,
@@ -243,27 +243,27 @@ CREATE TABLE `drinkstocaffeine` (
   KEY `cafId` (`cafId`),
   KEY `ix_drinksToCaffeine_caf` (`caf`),
   KEY `ix_drinksToCaffeine_drink` (`drink`),
-  CONSTRAINT `drinkstocaffeine_ibfk_1` FOREIGN KEY (`cafId`) REFERENCES `caf` (`id`)
+  CONSTRAINT `drinksToCaffeine_ibfk_1` FOREIGN KEY (`cafId`) REFERENCES `caf` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `drinkstocaffeine`
+-- Dumping data for table `drinksToCaffeine`
 --
 
-LOCK TABLES `drinkstocaffeine` WRITE;
-/*!40000 ALTER TABLE `drinkstocaffeine` DISABLE KEYS */;
-/*!40000 ALTER TABLE `drinkstocaffeine` ENABLE KEYS */;
+LOCK TABLES `drinksToCaffeine` WRITE;
+/*!40000 ALTER TABLE `drinksToCaffeine` DISABLE KEYS */;
+/*!40000 ALTER TABLE `drinksToCaffeine` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `drinkstotemp`
+-- Table structure for table `drinksToTemp`
 --
 
-DROP TABLE IF EXISTS `drinkstotemp`;
+DROP TABLE IF EXISTS `drinksToTemp`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `drinkstotemp` (
+CREATE TABLE `drinksToTemp` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `drink` varchar(50) DEFAULT NULL,
   `drinkId` int(11) DEFAULT NULL,
@@ -273,17 +273,17 @@ CREATE TABLE `drinkstotemp` (
   KEY `tempId` (`tempId`),
   KEY `ix_drinksToTemp_drink` (`drink`),
   KEY `ix_drinksToTemp_temp` (`temp`),
-  CONSTRAINT `drinkstotemp_ibfk_1` FOREIGN KEY (`tempId`) REFERENCES `temp` (`id`)
+  CONSTRAINT `drinksToTemp_ibfk_1` FOREIGN KEY (`tempId`) REFERENCES `temp` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `drinkstotemp`
+-- Dumping data for table `drinksToTemp`
 --
 
-LOCK TABLES `drinkstotemp` WRITE;
-/*!40000 ALTER TABLE `drinkstotemp` DISABLE KEYS */;
-/*!40000 ALTER TABLE `drinkstotemp` ENABLE KEYS */;
+LOCK TABLES `drinksToTemp` WRITE;
+/*!40000 ALTER TABLE `drinksToTemp` DISABLE KEYS */;
+/*!40000 ALTER TABLE `drinksToTemp` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
