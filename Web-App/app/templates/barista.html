@@ -160,7 +160,7 @@
               <th scope="col">Teacher</th>
               <th scope="col">Drinks</th>
               <th scope="col">Temp</th>
-              <th scope="col">Decaf</th>
+              <th scope="col">Decaf/SF</th>
               <th scope="col">Flavors</th>
               <th scope="col">Special Instructions</th>
               <th scope="col">Timestamp</th>
@@ -175,6 +175,12 @@
             o[0] - Username (ex. teacher)
             o[1] - order info 
               d - drink info
+              d[0] - menuitem
+              d[1] - temp
+              d[2] - caffiene
+              d[3] - SF
+              d[4] - flavors
+              d[5] - special instructions
             o[2] - Room number
             o[3] - Timestamp
             o[4] - Order number (?)
@@ -192,19 +198,31 @@
                 {% endfor %}</th>
               <th scope="col">
                 {% for d in o[1] %}
-                    {% if d[0] == True %}
-                        <p> Decaf </p>
+                    {% if d[2] == True %}
+                      <p> Decaf </p>
+                      {% if d[3] == True %}
+                        <p> Sugar Free </p>
+                      {% elif d[3] == False %}
+                        <p> Sugar OK </p>
+                      {% endif %}
                     {% else %}
-                        <p> Regular </p>
+                      {% if d[3] == True %}
+                        <p> Sugar Free </p>
+                        <p> Caffeinated </p>
+                      {% elif d[3] == False %}
+                        <p> Sugar OK </p>
+                        <p> Caffeinated </p>
+                      {% endif %}
                     {% endif %}
+
                 {% endfor %}</th>
               <th scope="col">
                 {% for d in o[1] %}
-                    <p> {{ d[3] }} </p>
+                    <p> {{ d[4] }} </p>
                 {% endfor %}</th>
               <th scope="col">
                 {% for d in o[1] %}
-                <p> {{ d[4] }}  </p>
+                <p> {{ d[5] }}  </p>
                 {% endfor %}</th>
               <th scope="col"> <p> {{ o[3] }} </p> </th>
 

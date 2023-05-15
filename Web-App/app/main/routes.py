@@ -6,7 +6,7 @@ from app.main.forms import CancelOrderBarista, RegistrationForm, TeacherRegistra
 from flask_login import current_user
 from flask_login import login_user
 from app import models
-from app.models import User, Flavor, MenuItem, Drink, Order, Temp, RoomNum, DrinksToFlavor, FavoriteDrink, HalfCaf, DrinksToTemp
+from app.models import User, Flavor, MenuItem, Drink, Order, Temp, Caf, RoomNum, DrinksToFlavor, FavoriteDrink, HalfCaf, DrinksToTemp, DrinksToCaf
 from flask_login import logout_user, login_required
 from flask import request
 from werkzeug.urls import url_parse
@@ -194,7 +194,7 @@ def logout():
 @bp.route('/email')
 def email():
         return redirect(url_for('main.login'))
-        # http://localhost:5000/email  #Leads to internal server error but send email
+        # http://localhost:5000/email  #Leads to internal server error but sends email
         # send_email('[Microblog] Reset Your Password', sender=app.config['ADMINS'][0], recipients=app.config['ADMINS'], text_body='hi')
 
 @bp.route('/supersecretpage', methods=['GET', 'POST'])
@@ -262,17 +262,25 @@ def custDrink(drinkId):
         elif current_user.user_type == "Admin":
                 return redirect(url_for('main.a_addUser'))
 
-        form = CustomizeForm(drinkId)
         m = MenuItem.query.get(drinkId)
-#
+        form = CustomizeForm(drinkId)
+        decaf = False
+        sf = False
+        for f in DrinksToCaf.query.filter_by(drinkId = drinkId): #Ask Schmit why its taking 1 positional arg, but was given 2
+                if(f.cafId == 3):
+                      decaf = True
+                elif(f.cafId == 2):
+                        sf = True               
         adding=form.adding.data
         if request.method == 'POST':
 
+                
                 value = range(int(adding))
                 for i in value:
                         d = Drink(menuItem=m.name,
                           temp_id=form.temp.data,
                           decaf=form.decaf.data,
+                          sf=form.sf.data,
                           flavors=form.flavors.data,
                           order_id=current_user.current_order_id,
                           inst=form.inst.data)
@@ -290,12 +298,13 @@ def custDrink(drinkId):
                         db.session.commit()
 
                 return redirect(url_for('main.myOrder', orderId=o.id))
-        return render_template('customize.html', title='Customize Drink', form=form, m=m)
+        return render_template('customize.html', title='Customize Drink', form=form, m=m, decaf=decaf, sf=sf)
 
+#displays the order that the user requested to the user
 @bp.route('/myOrder/<orderId>', methods=['GET', 'POST'])
 def myOrder(orderId):
 
-        if current_user.is_anonymous:
+        if current_user.is_anonymous: #redirects to user login if not signed in
                 return redirect(url_for('main.login'))
         elif current_user.user_type == "Barista":
                 return redirect(url_for('main.barista'))
@@ -324,10 +333,10 @@ def myOrder(orderId):
                 db.session.commit()
                 return redirect(url_for('main.justOrdered', orderId=orderId)) 
         elif halfcaf.acc_order == False:
-                flash("This is not a time for ordering drinks ")
+                flash("The Half Caf is currently closed for online order")
                 return redirect(url_for('main.home'))
         #drink_flavors = []
-        #for d in o.drink:
+        #for d in o.drink:      
                 #drink_flavors.append(str(Flavor.query.get(d.flavors)))
         
         drink_list = []
@@ -336,7 +345,7 @@ def myOrder(orderId):
                 flavorString = Flavor.query.get(d.flavors)
                 drink = (d.menuItem, temp.temp, d.decaf, str(flavorString)[8:-1], d.inst) #added the inst thing
                 drink_list.append(drink)
-        return render_template('myOrder.html', title='My Order', form=form, order=order,flavors=drink_list)
+        return render_template('myOrder.html', title='My Order', form=form, order=order,flavors= flavorString)
 
         
 @bp.route('/favoriteDrinks', methods=['GET','POST'])
@@ -380,6 +389,67 @@ def favoriteDrinks():
                 
 
         return render_template('favoriteDrinks.html', title='Favorite Drinks', favoriteDrinksForm=favoriteDrinks)
+
+@bp.route('/barista', methods=['GET', 'POST'])
+def barista():
+        if current_user.is_anonymous or current_user.user_type != 'Barista': #redirects the user to login screen if they are not signed in
+                return redirect(url_for('main.login'))
+
+        #init vars
+        form = BaristaForm()
+        store = HalfCaf.query.get(1)
+        orders = Order.query.all()
+        order_list = []
+        order_reverse = []
+        order = ()
+        drink_list = []
+        drink = ()
+        new = False
+
+        for o in orders:
+                drink_list = []
+                if o.roomnum_id != None: #roomnum exists
+                        if not o.complete: #drink not completed
+                                teacher = User.query.get(o.teacher_id) #customer
+                                roomnum = RoomNum.query.get(o.roomnum_id) 
+                                for d in o.drink: #creates drink variable for the order based off inputs from customer
+                                        temp = Temp.query.get(d.temp_id)
+                                        flavorString = Flavor.query.get(d.flavors)
+                                        drink = (d.menuItem, temp.temp, d.decaf, d.sf, str(flavorString)[8:-1], d.inst) #Drink variable 
+                                        drink_list.append(drink)
+
+                                order = (teacher.username, drink_list, roomnum.num, o.timestamp.strftime("%Y-%m-%d at %H:%M"), o.id, o.read)
+                                order_list.append(order)
+                                order_reverse.insert(0, order)
+                                
+                                if o.timestamp >= o.read:
+                                        new = True
+                                        o.read = datetime.datetime.now()
+                                        db.session.commit()
+                                else:
+                                        new = False
+                                
+        if request.method == 'POST':
+                
+                completed_order_id = request.form.get("complete_order")
+                completed_order = Order.query.get(completed_order_id)
+                completed_order.complete = True
+                
+                emailDrinkList  = []
+                for i in completed_order.drink:
+                        emailDrinkList.append(i.menuItem)
+
+                completed_teacher_id = completed_order.teacher_id
+                completed_teacher = User.query.filter_by(id = completed_teacher_id).first()
+               
+                order_email(completed_teacher.username, emailDrinkList, 'order ready!!', sender=app.config['ADMINS'][0], recipients=[completed_teacher.email])
+                
+                db.session.commit()
+                return redirect(url_for('main.barista'))
+
+
+        return render_template('barista.html', title='Barista', order_list=order_list, form=form, new_order=new, order_reverse = order_reverse, order_time = store.acc_order)
+
 
 @bp.route('/baristaCompleted', methods=['GET', 'POST'])
 def baristaCompleted():
@@ -512,7 +582,25 @@ def a_modifyDrink():
 
                                 drinkTemp = DrinksToTemp(drink=drink1.name, temp=t.temp, drinkId = drink1.id, tempId=t.id)
                                 db.session.add(drinkTemp)
+                if modifyDrink.caffeine.data and modifyDrink.drink.data: #new code - adds caffeine customization to admin form
+                        for c in DrinksToCaf.query.filter_by(drinkId = drink1.id):
+                                db.session.delete(c)
+                        for CafId in modifyDrink.caffeine.data:
+                                c = Caf.query.get(CafId)
 
+                                drinkCaf = DrinksToCaf(drink=drink1.name, caf = c.caf, drinkId = drink1.id, cafId = c.id) #WHERE DOES c.caf GO
+                                db.session.add(drinkCaf)
+                if modifyDrink.description.data and modifyDrink.drink.data: 
+                        description = modifyDrink.description.data
+                        drink1.description = description
+                if modifyDrink.price.data and modifyDrink.drink.data:
+                        price = modifyDrink.price.data
+                        drink1.price = price
+                #if modifyDrink.popular.data and modifyDrink.drink.data:
+                        #drink1.popular = 1
+                #else:
+                        #drink1.popular = 0
+                
                 db.session.commit()
                 return redirect(url_for('main.a_modifyDrink'))
 

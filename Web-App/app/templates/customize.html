@@ -28,8 +28,12 @@
                 
                 <p>{{ form.temp.label }}  {{ form.temp }}</p>
                 
-                <p>{{ form.decaf }} {{ form.decaf.label }}</p>
-                
+                {% if decaf %}
+                <p>{{ form.decaf }} {{ form.decaf.label }} </p>
+                {% endif %}
+                {% if sf %}
+                <p>{{ form.sf }} {{ form.sf.label }} </p>
+                {% endif %}
                 <p>{{ form.flavors.label }}  {{ form.flavors }}</p>
 
                 <p>{{ form.fav }} {{ form.fav.label }}</p>
