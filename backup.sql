@@ -1,8 +1,8 @@
--- MariaDB dump 10.19  Distrib 10.10.2-MariaDB, for debian-linux-gnu (x86_64)
+-- MariaDB dump 10.19  Distrib 10.8.3-MariaDB, for debian-linux-gnu (aarch64)
 --
 -- Host: localhost    Database: nnhshalfcaf
 -- ------------------------------------------------------
--- Server version	10.10.2-MariaDB-1:10.10.2+maria~ubu2204
+-- Server version	10.8.3-MariaDB-1:10.8.3+maria~jammy
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -32,8 +32,9 @@ CREATE TABLE `HalfCaf` (
   CONSTRAINT `CONSTRAINT_3` CHECK (`acc_order` in (0,1)),
   CONSTRAINT `CONSTRAINT_4` CHECK (`acc_order` in (0,1)),
   CONSTRAINT `CONSTRAINT_5` CHECK (`acc_order` in (0,1)),
-  CONSTRAINT `CONSTRAINT_6` CHECK (`acc_order` in (0,1))
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  CONSTRAINT `CONSTRAINT_6` CHECK (`acc_order` in (0,1)),
+  CONSTRAINT `CONSTRAINT_7` CHECK (`acc_order` in (0,1))
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45,6 +46,54 @@ LOCK TABLES `HalfCaf` WRITE;
 INSERT INTO `HalfCaf` VALUES
 (1,1);
 /*!40000 ALTER TABLE `HalfCaf` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `alembic_version`
+--
+
+DROP TABLE IF EXISTS `alembic_version`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `alembic_version` (
+  `version_num` varchar(32) NOT NULL,
+  PRIMARY KEY (`version_num`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `alembic_version`
+--
+
+LOCK TABLES `alembic_version` WRITE;
+/*!40000 ALTER TABLE `alembic_version` DISABLE KEYS */;
+INSERT INTO `alembic_version` VALUES
+('d164c6289484');
+/*!40000 ALTER TABLE `alembic_version` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `caf`
+--
+
+DROP TABLE IF EXISTS `caf`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `caf` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `caf` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `ix_caf_caf` (`caf`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `caf`
+--
+
+LOCK TABLES `caf` WRITE;
+/*!40000 ALTER TABLE `caf` DISABLE KEYS */;
+/*!40000 ALTER TABLE `caf` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -62,6 +111,7 @@ CREATE TABLE `drink` (
   `flavors` varchar(50) DEFAULT NULL,
   `order_id` int(11) DEFAULT NULL,
   `inst` varchar(150) DEFAULT NULL,
+  `sf` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `order_id` (`order_id`),
   KEY `temp_id` (`temp_id`),
@@ -69,6 +119,7 @@ CREATE TABLE `drink` (
   KEY `ix_drink_flavors` (`flavors`),
   KEY `ix_drink_inst` (`inst`),
   KEY `ix_drink_menuItem` (`menuItem`),
+  KEY `ix_drink_sf` (`sf`),
   CONSTRAINT `drink_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `order` (`id`),
   CONSTRAINT `drink_ibfk_2` FOREIGN KEY (`temp_id`) REFERENCES `temp` (`id`),
   CONSTRAINT `CONSTRAINT_1` CHECK (`decaf` in (0,1)),
@@ -76,8 +127,10 @@ CREATE TABLE `drink` (
   CONSTRAINT `CONSTRAINT_3` CHECK (`decaf` in (0,1)),
   CONSTRAINT `CONSTRAINT_4` CHECK (`decaf` in (0,1)),
   CONSTRAINT `CONSTRAINT_5` CHECK (`decaf` in (0,1)),
-  CONSTRAINT `CONSTRAINT_6` CHECK (`decaf` in (0,1))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  CONSTRAINT `CONSTRAINT_6` CHECK (`decaf` in (0,1)),
+  CONSTRAINT `CONSTRAINT_7` CHECK (`sf` in (0,1)),
+  CONSTRAINT `CONSTRAINT_8` CHECK (`decaf` in (0,1))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -108,7 +161,7 @@ CREATE TABLE `drinksToFlavor` (
   KEY `ix_drinksToFlavor_flavor` (`flavor`),
   KEY `ix_drinksToFlavor_flavorId` (`flavorId`),
   CONSTRAINT `drinksToFlavor_ibfk_1` FOREIGN KEY (`flavorId`) REFERENCES `flavor` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -174,6 +227,66 @@ INSERT INTO `drinksToFlavor` VALUES
 UNLOCK TABLES;
 
 --
+-- Table structure for table `drinksToCaffeine`
+--
+
+DROP TABLE IF EXISTS `drinksToCaffeine`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `drinksToCaffeine` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `drink` varchar(50) DEFAULT NULL,
+  `drinkId` int(11) DEFAULT NULL,
+  `caf` varchar(50) DEFAULT NULL,
+  `cafId` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `cafId` (`cafId`),
+  KEY `ix_drinksToCaffeine_caf` (`caf`),
+  KEY `ix_drinksToCaffeine_drink` (`drink`),
+  CONSTRAINT `drinksToCaffeine_ibfk_1` FOREIGN KEY (`cafId`) REFERENCES `caf` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `drinksToCaffeine`
+--
+
+LOCK TABLES `drinksToCaffeine` WRITE;
+/*!40000 ALTER TABLE `drinksToCaffeine` DISABLE KEYS */;
+/*!40000 ALTER TABLE `drinksToCaffeine` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `drinksToTemp`
+--
+
+DROP TABLE IF EXISTS `drinksToTemp`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `drinksToTemp` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `drink` varchar(50) DEFAULT NULL,
+  `drinkId` int(11) DEFAULT NULL,
+  `temp` varchar(50) DEFAULT NULL,
+  `tempId` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `tempId` (`tempId`),
+  KEY `ix_drinksToTemp_drink` (`drink`),
+  KEY `ix_drinksToTemp_temp` (`temp`),
+  CONSTRAINT `drinksToTemp_ibfk_1` FOREIGN KEY (`tempId`) REFERENCES `temp` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `drinksToTemp`
+--
+
+LOCK TABLES `drinksToTemp` WRITE;
+/*!40000 ALTER TABLE `drinksToTemp` DISABLE KEYS */;
+/*!40000 ALTER TABLE `drinksToTemp` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `favoriteDrinks`
 --
 
@@ -205,8 +318,9 @@ CREATE TABLE `favoriteDrinks` (
   CONSTRAINT `CONSTRAINT_3` CHECK (`decaf` in (0,1)),
   CONSTRAINT `CONSTRAINT_4` CHECK (`decaf` in (0,1)),
   CONSTRAINT `CONSTRAINT_5` CHECK (`decaf` in (0,1)),
-  CONSTRAINT `CONSTRAINT_6` CHECK (`decaf` in (0,1))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  CONSTRAINT `CONSTRAINT_6` CHECK (`decaf` in (0,1)),
+  CONSTRAINT `CONSTRAINT_7` CHECK (`decaf` in (0,1))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -230,7 +344,7 @@ CREATE TABLE `flavor` (
   `name` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `ix_flavor_name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -286,8 +400,9 @@ CREATE TABLE `menuItem` (
   CONSTRAINT `CONSTRAINT_3` CHECK (`popular` in (0,1)),
   CONSTRAINT `CONSTRAINT_4` CHECK (`popular` in (0,1)),
   CONSTRAINT `CONSTRAINT_5` CHECK (`popular` in (0,1)),
-  CONSTRAINT `CONSTRAINT_6` CHECK (`popular` in (0,1))
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  CONSTRAINT `CONSTRAINT_6` CHECK (`popular` in (0,1)),
+  CONSTRAINT `CONSTRAINT_7` CHECK (`popular` in (0,1))
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -348,8 +463,9 @@ CREATE TABLE `order` (
   CONSTRAINT `CONSTRAINT_3` CHECK (`complete` in (0,1)),
   CONSTRAINT `CONSTRAINT_4` CHECK (`complete` in (0,1)),
   CONSTRAINT `CONSTRAINT_5` CHECK (`complete` in (0,1)),
-  CONSTRAINT `CONSTRAINT_6` CHECK (`complete` in (0,1))
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  CONSTRAINT `CONSTRAINT_6` CHECK (`complete` in (0,1)),
+  CONSTRAINT `CONSTRAINT_7` CHECK (`complete` in (0,1))
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -378,7 +494,7 @@ CREATE TABLE `roomnum` (
   `num` varchar(25) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `ix_roomnum_num` (`num`)
-) ENGINE=InnoDB AUTO_INCREMENT=301 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=301 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -596,7 +712,7 @@ CREATE TABLE `temp` (
   `temp` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `ix_temp_temp` (`temp`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -638,8 +754,9 @@ CREATE TABLE `user` (
   CONSTRAINT `CONSTRAINT_3` CHECK (`isActivated` in (0,1)),
   CONSTRAINT `CONSTRAINT_4` CHECK (`isActivated` in (0,1)),
   CONSTRAINT `CONSTRAINT_5` CHECK (`isActivated` in (0,1)),
-  CONSTRAINT `CONSTRAINT_6` CHECK (`isActivated` in (0,1))
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  CONSTRAINT `CONSTRAINT_6` CHECK (`isActivated` in (0,1)),
+  CONSTRAINT `CONSTRAINT_7` CHECK (`isActivated` in (0,1))
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -665,4 +782,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-01-23 17:15:58
+-- Dump completed on 2023-05-11 17:25:33
