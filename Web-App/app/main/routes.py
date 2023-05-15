@@ -2,7 +2,7 @@ from operator import truediv
 from flask import render_template, flash, redirect, url_for, request
 from app import app
 from app import db
-from app.main.forms import RegistrationForm, TeacherRegistrationForm, LoginForm, CustomizeForm, OrderForm, FavoriteDrinksForm, BaristaForm, A_AddUserForm, A_DeleteUserForm, A_AddDrinkForm, A_DeleteDrinkForm, A_AddFlavorForm, A_DeleteFlavorForm, A_UserDashboardForm, A_ModifyDrinkForm, ResetPasswordRequestForm, ResetPasswordForm
+from app.main.forms import CancelOrderBarista, RegistrationForm, TeacherRegistrationForm, LoginForm, CustomizeForm, OrderForm, FavoriteDrinksForm, BaristaForm, A_AddUserForm, A_DeleteUserForm, A_AddDrinkForm, A_DeleteDrinkForm, A_AddFlavorForm, A_DeleteFlavorForm, A_UserDashboardForm, A_ModifyDrinkForm, ResetPasswordRequestForm, ResetPasswordForm
 from flask_login import current_user
 from flask_login import login_user
 from app import models
@@ -14,12 +14,63 @@ from app.main import bp
 from app import login
 from app.main.email import send_password_reset_email
 import datetime ##hello
-from app.main.email import order_email, reg_email
+from app.main.email import order_email, reg_email, cancel_email
+
+
+
+@bp.route('/cancelOrderBarista', methods=['GET', 'POST'])
+def cancelOrderBarista():
+        form = CancelOrderBarista()
+
+        orders = Order.query.all()
+        order_list = []
+        order_reverse = []
+        order = ()
+        drink_list = []
+        drink = ()
+
+        for o in orders:
+                drink_list = []
+                if o.roomnum_id != None:
+                        if not o.complete:
+                                teacher = User.query.get(o.teacher_id)
+                                roomnum = RoomNum.query.get(o.roomnum_id)
+                                for d in o.drink:
+                                        temp = Temp.query.get(d.temp_id)
+                                        flavorString = Flavor.query.get(d.flavors)
+                                        drink = (d.menuItem, temp.temp, d.decaf, str(flavorString)[8:-1], d.inst) #added the inst thing
+                                        drink_list.append(drink)
+
+                                order = (teacher.username, drink_list, roomnum.num, o.timestamp.strftime("%Y-%m-%d at %H:%M"), o.id, o.read)
+                                order_list.append(order)
+                                order_reverse.insert(0, order)
+        
+        orders = Order.query.all()
+
+        if request.method == 'POST':
+                cancel_order_id = request.form.get("order_id")
+                cancel_order = Order.query.get(cancel_order_id)
+                
+                emailDrinkList  = []
+                for i in cancel_order.drink:
+                        emailDrinkList.append(i.menuItem)
+
+                cancel_teacher_id = cancel_order.teacher_id
+                cancel_teacher = User.query.filter_by(id = cancel_teacher_id).first()
+     
+                cause = form.reason.data
+
+                cancel_email(cancel_teacher.username, emailDrinkList, cause, 'Your Half Caf Order has been cancelled', sender=app.config['ADMINS'][0], recipients=[cancel_teacher.email])
+                
+                cancel_order.complete = True
+
+                db.session.commit()
+        return redirect(url_for('main.barista'))
 
 @login.user_loader
 def load_user(id):
         return User.query.get(int(id))
-
+ 
 @bp.route('/', methods=['GET', 'POST'])
 @bp.route('/home', methods=['GET', 'POST'])
 def home():
@@ -38,7 +89,6 @@ def justOrdered(orderId):
         order = Order.query.get(orderId)
         myDrink = order.drink
         return render_template("justOrdered.html", title='Your Order', orderId=orderId, myDrink=myDrink)
-
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
@@ -112,7 +162,8 @@ def teacherRegister():
                 user = User(username=form.username.data, user_type=form.user_type.data, current_order_id=None, isActivated=False, email=form.email.data)
                 user.set_password(form.password.data)
                 db.session.add(user)
-                reg_email(user)
+                
+                #reg_email(user)
                 db.session.commit()
                 user = User.query.filter_by(username=form.username.data).first()
 
@@ -312,11 +363,10 @@ def barista():
                                 else:
                                         new = False
                                 
-        print(order_list)
-        if request.method == 'POST':
-                
+        if request.method == 'POST' and "complete_order" in request.form:
                 completed_order_id = request.form.get("complete_order")
                 completed_order = Order.query.get(completed_order_id)
+                
                 completed_order.complete = True
                 
                 emailDrinkList  = []
@@ -330,10 +380,15 @@ def barista():
                 
                 db.session.commit()
                 return redirect(url_for('main.barista'))
-
-
+        
+        elif request.method == 'POST' and 'cancel_order' in request.form:
+                form = CancelOrderBarista()
+                return render_template("cancelOrderBarista.html", title='Order Cancelled', form=form,order_id=request.form.get("cancel_order"))
+                
+                
         return render_template('barista.html', title='Barista', order_list=order_list, form=form, new_order=new, order_reverse = order_reverse, order_time = store.acc_order)
 
+ 
 
 @bp.route('/baristaCompleted', methods=['GET', 'POST'])
 def baristaCompleted():
@@ -408,15 +463,10 @@ def a_deleteUser():
 
         if request.method == 'POST':
                 user = User.query.get(deleteUser.user.data)
-
                 user.current_order_id = None #added
-
                 for o in Order.query.all():
-
-                        if o.teacher_id == user.id:
-                        
+                        if o.teacher_id == user.id:        
                                 for d in o.drink:
-
                                         db.session.delete(d)
                                 db.session.delete(o)
 
