@@ -520,6 +520,61 @@ Docker is the shell-like container that holds the webapp so that we can easily d
 This is an object created to designate what flavors belong to what drink. Each object has two parts, saying a drink and a flavor. This means that there would be a bunch of DrinkToFlavor objects for a singular drink, and if you collected all of them it would display what flavors belong to what drink, which is what we do in the modify drink page.
 
 
+**2023 README Contents:**
+
+General Video Overview: https://drive.google.com/file/d/10nCb4HnBFvlhRBmkF_7hczNDBj6DaNrx/view?usp=share_link
+https://drive.google.com/file/d/1AFZDit07_ozKctIBxMr0d5oGjXZOqov7/view
+
+Brief Overview: The half caf web app is a website for TEACHERS to order drinks of their choice. There are 3 ends: user, admin, and barista. The users are teachers who can order drinks. Baristas are students who work in the half caf and can see the orders pop up in real time. The admin as of right now is Mr. Skarr and can make all kinds of modifications to drinks and users. The admin features will be highlights in more detail in a video.
+
+Here is our demo presentation that covers everything in detail: Half Caf Demo (the video is helpful)
+
+Platform Requirements: Make sure docker is installed on the system since we have no system requirements. You must have docker open in order to run the web app locally. There are a lot of docker commands, but a few useful ones are:
+docker compose -f docker-compose.yml -f docker-compose.debug.yml up --build webapp (to rebuild and restart the app, do this one first)
+docker compose -f docker-compose.yml -f docker-compose.debug.yml up --build (typically for everyday use)
+**Normal “docker compose up” doesn’t include debug and doesn’t build development server
+
+After you enter the docker command into the terminal for the first time only, type this into the terminal:
+cat ./backup.sql | docker exec -i “CONTAINER ID” /usr/bin/mysql -u root --password=”PASSWORD” nnhshalfcaf
+“CONTAINER ID” is ID number from docker ps
+Password is halfcafwebappadmins123
+It might not look like it directly returns something, but it may still work
+Ctrl C stops running the program
+
+Branches:
+For each task/story, create a new branch titled something about that branch (ex: branch to cancel orders for barista, branch name is “cancel order barista”
+Do NOT do all your work into main. At the end, when you complete the task, you can squash and merge your task branch with the main branch, so all your work will be in the server that way
+Be careful of migrations. They show up when you make changes to the database, a.k.a. Models.py. Ask Mr. Schmit for help with this
+
+A tips document will be linked later in this document with docker commands help.
+
+Bullet Points 4-6: 
+
+High Level Architecture: Read the current README file as it has everything you need to know everything docker/SQL/Flask related.
+
+
+quickstart.py
+
+Mr. Skarr wants a way to easily access all drink orders to easily identify order trends and popular drinks. At the moment, this file is separate form all the other code associated with the web app and runs as its own python file. At the moment, the link to a google sheet can be inserted into it, and you can manually type in drinks through VSCode to add to the google sheet. The next team can try to see if they can make drinks automatically update to the sheet (which might mean moving some code to routes), however, if this does not work, it may be more wise to instead have it as a csv file to download instead of a google sheet. Thus is just the template code you can use if Mr. Skarr would still like it as a sheet.
+
+Note: be very careful if adding your credentials and committing to GitHub (you do not want your information to be accessed by the public)
+
+command: python quickstart.py
+
+
+
+Detailed Descriptions: It is all in the README from previous groups.
+
+User Stories: All on Trello
+
+Captured all known issues: 
+
+Shows error for duplicate emails/usernames.
+Shows error when a temp is not selected for a drink
+some features work on local host but not on server. Such as modify drink misc. options.
+
+
+
 
 
 
