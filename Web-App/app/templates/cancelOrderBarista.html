@@ -122,6 +122,7 @@
     <body>
         
         <h1> NNHS Half Caf Barista</h1>
+        
         {% block navbar %}
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -153,116 +154,33 @@
         </nav>
         {% endblock %}
         <div>
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th scope="col">Room Number</th>
-              <th scope="col">Teacher</th>
-              <th scope="col">Drinks</th>
-              <th scope="col">Temp</th>
-              <th scope="col">Decaf/SF</th>
-              <th scope="col">Flavors</th>
-              <th scope="col">Special Instructions</th>
-              <th scope="col">Timestamp</th>
-              <th scope="col">Cancel Order</th>
-              <th scope="col">Finished</th>
-            </tr>
-          </thead>
-          <tbody>
-    
+          <br>
+          <h2> You are trying to cancel an order... </p>
+          <h3> Please type in the text box why to send out an email to the customer to inform them of the cancellation. </p>
+
+
+
           {% for o in order_list %}
           <!--Order list 
             o[0] - Username (ex. teacher)
             o[1] - order info 
               d - drink info
-              d[0] - menuitem
-              d[1] - temp
-              d[2] - caffiene
-              d[3] - SF
-              d[4] - flavors
-              d[5] - special instructions
             o[2] - Room number
             o[3] - Timestamp
             o[4] - Order number (?)
           -->
-            <tr>
-              <th scope="col">{{ o[2] }}</th> 
-              <th scope="col">{{ o[0] }}</th>
-              <th scope="col">
-                {% for d in o[1] %}
-                    <p> {{ d[0] }} </p>
-                {% endfor %}</th>
-              <th scope="col">
-                {% for d in o[1] %}
-                    <p> {{ d[1] }} </p>
-                {% endfor %}</th>
-              <th scope="col">
-                {% for d in o[1] %}
-                    {% if d[2] == True %}
-                      <p> Decaf </p>
-                      {% if d[3] == True %}
-                        <p> Sugar Free </p>
-                      {% elif d[3] == False %}
-                        <p> Sugar OK </p>
-                      {% endif %}
-                    {% else %}
-                      {% if d[3] == True %}
-                        <p> Sugar Free </p>
-                        <p> Caffeinated </p>
-                      {% elif d[3] == False %}
-                        <p> Sugar OK </p>
-                        <p> Caffeinated </p>
-                      {% endif %}
-                    {% endif %}
-
-                {% endfor %}</th>
-              <th scope="col">
-                {% for d in o[1] %}
-                    <p> {{ d[4] }} </p>
-                {% endfor %}</th>
-              <th scope="col">
-                {% for d in o[1] %}
-                <p> {{ d[5] }}  </p>
-                {% endfor %}</th>
-              <th scope="col"> <p> {{ o[3] }} </p> </th>
-
-
-              <!-- Issue with method ='post', because there are two-->
-              <th scope="col"> <form action="" method="post" name = 'cancel_order' novalidate>
-              <button type="submit" id="id_{{o[4]}}" name="cancel_order" value="{{o[4]}}">Cancel Order</button> </form> </th>
-              <th scope="col"> <form action="" method="post" name = 'complete_order' novalidate>
-              <button type="submit" id="id_{{o[4]}}" name="complete_order" value="{{o[4]}}">Complete Order</button> </form> </th>
-            </tr>
-            {% endfor %}
+          {% endfor %}
+  
+  
+            <br>
+            <h4>Type below</p>
+     
+             <!-- fix styling/hide element-->
+            <form action="/cancelOrderBarista" method="post" novalidate>{{ form.reason }}<br><input type="text" value="{{order_id}}" name="order_id" style="display:none" readonly><p>{{ form.submitting }}  </p></form>
             </tbody>
         </table>
         </div>
     
         
-    </body>
-
-    <body>
-      <div class="wrapper">
-        <div class="notification_wrap">
-          <div class="notification_icon" id="clicks">
-            <button type="button" class="icon-button" onclick="Date()">
-              <span class="material-icons">notifications</span>
-              {% if new_order %}
-                <span class="icon-button__badge"></span>
-              {% endif %}
-            </button>
-          </div>
-          <div class="dropdown">
-            <div class="notify_item">
-              <div class="notify_info">
-                {% for o in order_reverse %}
-                  <p> room {{ o[2] }}, {{ o[0] }} just placed an order!</p>
-                {% endfor %}
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
     </body>
 {% endblock %}
