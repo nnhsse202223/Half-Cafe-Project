@@ -540,7 +540,6 @@ After you enter the Docker command into the terminal for the first time only, ty
 `cat ./backup.sql | docker exec -i “CONTAINER ID” /usr/bin/mysql -u root --password=”PASSWORD” nnhshalfcaf`
 “CONTAINER ID” is ID number from docker ps
 
-Password is `halfcafwebappadmins123`
 It might not look like it directly returns something, but it may still work
 Ctrl C stops running the program
 
